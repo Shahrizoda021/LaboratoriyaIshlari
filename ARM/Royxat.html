@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+ body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+    h4 {
+  text-align: center;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #84acc4, #42d1d6); /* chiroyli gradient fon */
+  color: white;
+  border-radius: 8px; /* yumaloq burchak */
+  display: inline-block; /* ortiqcha kenglik bo‘lmasin */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* tashqi soya */
+  text-shadow: 1px 2px 4px rgba(0,0,0,0.4); /* yozuv soyasi */
+}
+
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+      width: 80%;
+      border: 2px solid #333;
+    }
+    th, td {
+      border: 1px solid #555;
+      padding: 10px;
+      text-align: center;
+      transition: color 0.3s, font-size 0.3s, text-shadow 0.3s;
+    }
+    /* Faqat th emas, data qatorlariga */
+    tbody tr:hover td {
+      font-size: 1.1em;               /* Yozuvlar kattalashadi */
+      color: #0077cc;                 /* Rang biroz o‘zgaradi */
+      text-shadow: 0 0 6px rgba(0,0,0,0.2); /* Yengil soya beradi */
+    }
+    thead th {
+      background-color: #04AA6D;
+      color: white;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    tr {
+  transition: all 0.3s ease; /* Silliq animatsiya */
+}
+
+tr:hover {
+  transform: scale(1.02);           /* Biroz kattalashtirish (bo‘rtib chiqish) */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Soya hosil qiladi */
+  background-color: #caf36a !important;  /* Hover rangi biroz o‘zgaradi */
+}
+  
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #999; /* Chegara rangi o'zgartirildi */
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #e6f0ff; /* Juft qatorlar uchun och ko‘k */
+}
+
+tr:hover {
+  background-color: #9dc936; /* Hover qilinganda to‘qroq ko‘k */
+}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #3366cc; /* Sarlavha uchun to‘q ko‘k */
+  color: #ffffff; /* Matn oq */
+}
+
+
+.title-box {
+  text-align: center;          /* Matnni markazga */
+  border: 2px solid #3366cc;   /* Chegara */
+  display: block;              /* Elementni block qilib olish */
+  width: fit-content;          /* Border faqat matn uzunligida bo‘lsin */
+  margin: 20px auto;           /* Chap-o‘ngdan auto → o‘zi markazga chiqadi */
+  padding: 8px 16px;           /* Ichki bo‘shliq */
+  border-radius: 8px;          /* Burchaklarni yumaloqlash */
+  background-color: #f0f8ff;   /* Fon rangi */
+  color: #333;                 /* Matn rangi */
+}
+</style>
+
+
+</style>
+
+</head>
+<body>
+
+ <h4 class="title-box">234-KIDT guruh talabalar jadvali</h4>
+ <table class="table table-bordered table-striped">
+     <thead class="table-dark">
+         <tr>
+             <th>#</th>
+             <th>Ismi</th>
+             <th>Familiyasi</th>
+             <th>Otasining ismi</th>
+             <th>Emaili</th>
+         </tr>
+     </thead>
+     <tbody>
+  <tr>
+    <td>1</td>
+    <td>Achilev</td>
+    <td>Asadbek</td>
+    <td>Rajabbayevich</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=achilev.asadbek@example.com" target="_blank">achilev.asadbek@example.com</a></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Alimov</td>
+    <td>Diyorbek</td>
+    <td>Ismoil o'g'li</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=alimov.diyorbek@example.com" target="_blank">alimov.diyorbek@example.com</a></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Baxtiyorova</td>
+    <td>Ruxshona</td>
+    <td>Mansurbek qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=baxtiyorova.ruxshona@example.com" target="_blank">baxtiyorova.ruxshona@example.com</a></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Bekchanova</td>
+    <td>Sevinch</td>
+    <td>Safarbоy qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=bekchanova.sevinch@example.com" target="_blank">bekchanova.sevinch@example.com</a></td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Boltaboyev</td>
+    <td>Sirojiddin</td>
+    <td>O'ktam o'g'li</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=boltaboyev.sirojiddin@example.com" target="_blank">boltaboyev.sirojiddin@example.com</a></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Boltayeva</td>
+    <td>Shaydaxon</td>
+    <td>Otanazar qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=boltayeva.shaydaxon@example.com" target="_blank">boltayeva.shaydaxon@example.com</a></td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>Egamberganova</td>
+    <td>Gulkhan</td>
+    <td>Otabek qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=egamberganova.gulkhan@example.com" target="_blank">egamberganova.gulkhan@example.com</a></td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>Ibodullayeva</td>
+    <td>Dilafruz</td>
+    <td>Matrasul qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=ibodullayeva.dilafruz@example.com" target="_blank">ibodullayeva.dilafruz@example.com</a></td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>Jabborberganov</td>
+    <td>Feruzbek</td>
+    <td>Rasul o'g'li</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=jabborberganov.feruzbek@example.com" target="_blank">jabborberganov.feruzbek@example.com</a></td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>Komilova</td>
+    <td>Farangiz</td>
+    <td>Ulug'bek qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=komilova.farangiz@example.com" target="_blank">komilova.farangiz@example.com</a></td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>Matchonov</td>
+    <td>Jamshid</td>
+    <td>Bahodir o'g'li</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=matchonov.jamshid@example.com" target="_blank">matchonov.jamshid@example.com</a></td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>Odamboyeva</td>
+    <td>Muhayyo</td>
+    <td>Xushnudbek qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=odamboyeva.muhayyo@example.com" target="_blank">odamboyeva.muhayyo@example.com</a></td>
+  </tr>
+  <tr>
+    <td>13</td>
+    <td>Omonboyeva</td>
+    <td>Yulduz</td>
+    <td>Bahrom qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=omonboyeva.yulduz@example.com" target="_blank">omonboyeva.yulduz@example.com</a></td>
+  </tr>
+  <tr>
+    <td>14</td>
+    <td>Qalandarov</td>
+    <td>Boburbek</td>
+    <td>Oybek o'g'li</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=qalandarov.boburbek@example.com" target="_blank">qalandarov.boburbek@example.com</a></td>
+  </tr>
+  <tr>
+    <td>15</td>
+    <td>Qurbondurdiyeva</td>
+    <td>Zuhrajon</td>
+    <td>Ravshanbek qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=qurbondurdiyeva.zuhrajon@example.com" target="_blank">qurbondurdiyeva.zuhrajon@example.com</a></td>
+  </tr>
+  <tr>
+    <td>16</td>
+    <td>Rajabboyev</td>
+    <td>Abrorbok</td>
+    <td>Azamat o'g'li</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=rajabboyev.abrorbok@example.com" target="_blank">rajabboyev.abrorbok@example.com</a></td>
+  </tr>
+  <tr>
+    <td>17</td>
+    <td>Razzaqova</td>
+    <td>Ro'zaxon</td>
+    <td>O'ktam qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=razzaqova.rozaxon@example.com" target="_blank">razzaqova.rozaxon@example.com</a></td>
+  </tr>
+  <tr>
+    <td>18</td>
+    <td>Ro'zimova</td>
+    <td>Lobar</td>
+    <td>Matmurod qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=rozimova.lobar@example.com" target="_blank">rozimova.lobar@example.com</a></td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td>Rustamova</td>
+    <td>Shahrizoda</td>
+    <td>Farhod qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=rustamova.shahrizoda@example.com" target="_blank">rustamova.shahrizoda@example.com</a></td>
+  </tr>
+  <tr>
+    <td>20</td>
+    <td>Safoyozova</td>
+    <td>Momogul</td>
+    <td>Bahodir qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=safoyozova.momogul@example.com" target="_blank">safoyozova.momogul@example.com</a></td>
+  </tr>
+  <tr>
+    <td>21</td>
+    <td>Sharipova</td>
+    <td>Donira</td>
+    <td>Rustamboy qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=sharipova.donira@example.com" target="_blank">sharipova.donira@example.com</a></td>
+  </tr>
+  <tr>
+    <td>22</td>
+    <td>Tojieva</td>
+    <td>Nasiba</td>
+    <td>Masharip qizi</td>
+    <td><a href="https://mail.google.com/mail/?view=cm&fs=1&to=tojieva.nasiba@example.com" target="_blank">tojieva.nasiba@example.com</a></td>
+  </tr>
+</tbody>
+
+ </table>
+
+</body>
+</html>

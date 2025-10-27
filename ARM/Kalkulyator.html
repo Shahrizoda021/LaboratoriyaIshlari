@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulyator</title>
+</head>
+<body>
+  <h2>Oddiy Kalkulyator</h2>
+
+
+<br><br>
+
+  <input type="text" id="son1" placeholder="Son1">
+  <input type="text" id="son2" placeholder="Son2">
+ <br><br>
+
+  <button onclick="amalniTanla('+')">+</button>
+  <button onclick="amalniTanla('-')">−</button>
+  <button onclick="amalniTanla('*')">×</button>
+  <button onclick="amalniTanla('/')">÷</button>
+  <button onclick="hisobla()">=</button>
+
+  <p id="natija"></p>
+
+  <script>
+    let tanlanganAmal = null;
+
+    function amalniTanla(amal) {
+      tanlanganAmal = amal;
+      
+    }
+
+    function hisobla() {
+      var son1 = document.getElementById("son1").value;
+      var son2 = document.getElementById("son2").value;
+
+      if (son1 === "" || son2 === "") {
+        alert("Iltimos, ikkala sonni ham kiriting!");
+        return;
+      }
+
+      if (tanlanganAmal === null) {
+        alert("Iltimos, amalni tanlang (+, −, × yoki ÷)!");
+        return;
+      }
+
+      hisob(tanlanganAmal);
+    }
+
+    function hisob(amal) {
+      var son1 = document.getElementById("son1").value;
+      var son2 = document.getElementById("son2").value;
+
+      if (amal === '+') {
+        var yigindi = +son1 + +son2;
+        document.getElementById("natija").innerHTML = "Yig'indi: " + yigindi;
+      }
+
+      if (amal === '-') {
+        var ayirma = +son1 - +son2;
+        document.getElementById("natija").innerHTML = "Ayirma: " + ayirma;
+      }
+
+      if (amal === '*') {
+        var kopaytma = +son1 * +son2;
+        document.getElementById("natija").innerHTML = "Ko'paytma: " + kopaytma;
+      }
+
+      if (amal === '/') {
+        if (son2 == 0) {
+          document.getElementById("natija").innerHTML = "Nolga bo'lib bo'lmaydi!";
+          return;
+        }
+        var bolinma = +son1 / +son2;
+        document.getElementById("natija").innerHTML = "Bo'linma: " + bolinma;
+      }
+    }
+  </script>
+</body>     
+</html>

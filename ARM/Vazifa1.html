@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Jadval yaratish (jQuery bilan)</title>
+<script src="Fayllar/jquery.js"></script>
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f8fafc;
+        margin: 40px;
+    }
+
+    h2 {
+        color: #1e3a8a;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    .form input {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        width: 180px;
+        transition: all 0.3s;
+    }
+
+    .form input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 5px rgba(37,99,235,0.3);
+    }
+
+    .form button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 9px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .form button:hover {
+        background: #1e40af;
+    }
+
+    table {
+        width: 80%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        background: white;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        text-align: center;
+    }
+
+    th {
+        background: #2563eb;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background: #f1f5f9;
+    }
+
+    .action-btn {
+        padding: 6px 10px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .edit {
+        background-color: #22c55e;
+        color: white;
+    }
+
+    .edit:hover {
+        background-color: #16a34a;
+    }
+
+    .delete-btn {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background-color: #b91c1c;
+    }
+</style>
+
+</head>
+<body>
+
+<h2>Talabalar Jadvali</h2>
+
+<div class="form">
+    <input type="text" id="fio" placeholder="F.I.O">
+    <input type="text" id="fakultet" placeholder="Fakultet">
+    <button id="addBtn">Qo‘shish</button>
+</div>
+
+<table id="studentTable">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>F.I.O</th>
+            <th>Fakultet</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Yangi satrlar shu yerga qo‘shiladi -->
+    </tbody>
+</table>
+
+<script>
+$(document).ready(function(){
+
+    let count = 0;
+
+    // Qo‘shish tugmasi bosilganda
+    $("#addBtn").click(function(){
+        addRow();
+    });
+
+    // Enter bosilganda avtomatik qo‘shish
+    $("input").keypress(function(e){
+        if(e.which == 13){ // Enter tugmasi
+            addRow();
+        }
+    });
+
+    function addRow(){
+        let fio = $("#fio").val().trim();
+        let fakultet = $("#fakultet").val().trim();
+
+        if(fio === "" || fakultet === ""){
+            alert("Iltimos, F.I.O va Fakultetni kiriting!");
+            return;
+        }
+
+        count++;
+        let newRow = `
+            <tr>
+                <td>${count}</td>
+                <td>${fio}</td>
+                <td>${fakultet}</td>
+                <td>
+                    <button class="action-btn edit">Tahrirlash</button>
+                    <button class="action-btn delete-btn delete">O‘chirish</button>
+                </td>
+            </tr>
+        `;
+
+        $("#studentTable tbody").append(newRow);
+
+        // maydonlarni tozalash
+        $("#fio").val('');
+        $("#fakultet").val('');
+    }
+
+    // O‘chirish tugmasi
+    $(document).on("click", ".delete", function(){
+        $(this).closest("tr").remove();
+        // raqamlarni qayta sanash
+        count = 0;
+        $("#studentTable tbody tr").each(function(){
+            count++;
+            $(this).find("td:first").text(count);
+        });
+    });
+
+    // Tahrirlash tugmasi
+    $(document).on("click", ".edit", function(){
+        let row = $(this).closest("tr");
+        let fio = row.find("td:eq(1)").text();
+        let fakultet = row.find("td:eq(2)").text();
+
+        $("#fio").val(fio);
+        $("#fakultet").val(fakultet);
+
+        row.remove();
+        count--;
+    });
+
+});
+</script>
+
+</body>
+</html>

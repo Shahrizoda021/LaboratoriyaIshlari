@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro‘yxatdan o‘tish / Fikr bildirish</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            width: 400px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .radio-group {
+            margin-top: 10px;
+        }
+
+        .radio-group input {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📝 Ro‘yxatdan o‘tish yoki fikr bildirish</h2>
+
+    <div class="container">
+        <form action="#" method="post">
+
+            <label for="ism">Ism:</label>
+            <input type="text" id="ism" name="ism" placeholder="Ismingizni kiriting" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Email manzilingiz" required>
+
+            <label for="jins">Jins:</label>
+            <div class="radio-group">
+                <input type="radio" name="jins" value="Erkak" required> Erkak
+                <input type="radio" name="jins" value="Ayol"> Ayol
+            </div>
+
+            <label for="mutaxassislik">Mutaxassislik:</label>
+            <select id="mutaxassislik" name="mutaxassislik" required>
+                <option value="">Tanlang...</option>
+                <option value="informatika">Informatika</option>
+                <option value="biologiya">Biologiya</option>
+                <option value="tibbiyot">Tibbiyot</option>
+                <option value="iqtisodiyot">Iqtisodiyot</option>
+            </select>
+
+            <label for="izoh">Fikringiz yoki izoh:</label>
+            <textarea id="izoh" name="izoh" rows="4" placeholder="Bu yerga fikringizni yozing..."></textarea>
+
+            <button type="submit">Yuborish</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Fikr Bildirish Sahifasi | Barcha huquqlar himoyalangan
+    </div>
+
+</body>
+</html>
