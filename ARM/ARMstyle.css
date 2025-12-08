@@ -1,0 +1,361 @@
+/*
+|--------------------------------------------------------------------------
+| BIRLASHGAN ASOSIY USLUBLAR FAYLI (Uzbek Style v2.0)
+| Original uchta uslub va animatsiya qismlaridan olingan va tartibga solingan.
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| I. GLOBAL O'ZGARUVCHILAR (CSS Custom Properties)
+|--------------------------------------------------------------------------
+*/
+
+:root {
+    /* Asosiy ranglar */
+    --color-primary: #5c7cfa;       /* Aksent rangi (Ko'k) */
+    --color-secondary: #3b82f6;      /* Dark aksent/Hover rangi */
+    --color-text: #222;             /* Asosiy matn */
+    --color-muted: #666;             /* Muted matn */
+    --color-border: #e6e6ef;         /* Chegara */
+    --color-shadow: rgba(0, 0, 0, 0.1); /* Yengil soya */
+    
+    /* Fon va Kartalar */
+    --bg-light: linear-gradient(135deg, #f7f7fb, #eef1f9); /* Ochiq fon */
+    --bg-app: #eaf3fa;              /* O'zbekcha asosiy fon */
+    --card-light: #ffffff;          /* Kartochka foni */
+    
+    /* Maxsus Dark/Quiz ranglari */
+    --dark-bg: #0b1222;
+    --dark-panel: #0e162b;
+    --dark-text: #e5e7eb;
+}
+
+/*
+|--------------------------------------------------------------------------
+| II. UMUMIY ELEMENTLAR (Body, Header, Footer)
+|--------------------------------------------------------------------------
+*/
+
+body {
+    font-family: "Segoe UI", "Poppins", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    background: var(--bg-app); /* O'zbek uslubidagi fon */
+    color: var(--color-text);
+    line-height: 1.6;
+    padding: 0;
+}
+
+header, footer {
+    /* O'zbekcha gradient */
+    background: linear-gradient(90deg, #cfebf0, #98cbff); 
+    color: #111111;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px var(--color-shadow);
+    border-bottom: 3px solid #ffb703; /* Sarı chiziq */
+}
+
+/*
+|--------------------------------------------------------------------------
+| III. NAVIGATSIYA Uslublari 🌐
+|--------------------------------------------------------------------------
+*/
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    /* To'q rangli fon */
+    background: rgba(17, 34, 51, 0.95); /* To'q ko'k rang */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    border-radius: 0;
+}
+
+nav ul li {
+    margin: 0; 
+}
+
+nav ul li a {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px; /* Tugma kattaligi */
+    color: #00ffff; /* Yorqin Siyan (Cyan) matn rangi */
+    text-decoration: none;
+    background: transparent; 
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Hover va Aktiv uslublar */
+nav ul li a:hover {
+    color: #ffffff; /* Hoverda matn oq rangga o'zgaradi */
+    background: rgba(255, 255, 255, 0.05); /* Engilroq fon */
+    text-decoration: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| IV. FORMA ELEMENTLARI VA TUGMALAR (Buttons)
+|--------------------------------------------------------------------------
+*/
+
+.filters input[type="text"],
+.filters select,
+form input, form select, form textarea {
+    display: block;
+    width: 25%;
+    height: 38px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filters input:focus, .filters select:focus,
+form input:focus, form select:focus, form textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(92, 124, 250, 0.2);
+    outline: none;
+}
+
+.btn {
+    height: 38px;
+    border-radius: 8px;
+    border: none;
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.btn:hover {
+    background: var(--color-secondary);
+    transform: translateY(-2px);
+}
+.btn-outline {
+    background: #fff;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+.btn-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+
+
+
+/* Sarlavha */
+h1 {
+    text-align: center;
+    color: #0e64db;
+    font-size: 42px;
+    letter-spacing: 1px;
+    margin: 40px 0;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.25);
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Asosiy qism */
+main {
+    padding: 30px;
+}
+
+/* Jadval */
+table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease-in-out;
+}
+thead {
+    background: linear-gradient(90deg, #457b9d, #b2c3db);
+    color: #fff;
+}
+th, td {
+    padding: 14px 18px;
+    text-align: left;
+}
+th {
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+tbody tr:nth-child(even) {
+    background-color: #f5f9fc;
+}
+tbody tr:hover {
+    background-color: #eaf3fa;
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
+}
+td {
+    border-bottom: 1px solid #eee;
+}
+tfoot {
+    background: #b4f340;
+    color: #fff;
+    text-align: center;
+    font-style: italic;
+    padding: 12px;
+}
+
+/* Formalar */
+form {
+    margin: 20px auto;
+    background: rgba(255,255,255,0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    width: 80%;
+}
+form input, form select, form textarea, form button {
+    display: block;
+    margin: 12px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+form button {
+    background: #1d3557;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+form button:hover {
+    background: #457b9d;
+    transform: translateY(-2px);
+}
+
+/* Kitoblar grid */
+.kitoblar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+.kitob {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.kitob:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+.kitob img {
+    max-width: 120px;
+    margin-bottom: 12px;
+}
+
+/* Linklar */
+a {
+    color: #1d70b8;
+    text-decoration: none;
+    font-weight: 500;
+}
+a:hover {
+    text-decoration: underline;
+    color: #0b4a75;
+}
+
+/* Animatsiya */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| VIII. ANIMATSIYALAR (Keyframes & Qo'llash) 💫
+|--------------------------------------------------------------------------
+*/
+
+/* 1. Keyframes (Animatsiya Harakati) */
+@keyframes logo-kirib-kelish {
+    0% {
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    100% {
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* 2. Elementlarga Animatsiyani Qo'llash */
+.site-logo { /* Header ichidagi logotipga misol */
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    display: inline-block;
+    
+    animation-name: logo-kirib-kelish;
+    animation-duration: 1s;
+    animation-delay: 0.8s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    
+    opacity: 0; /* Animatsiya boshlanishidan oldin yashirish */
+}
+
+nav { /* Navigatsiya paneliga animatsiya */
+    animation-name: logo-kirib-kelish; 
+    animation-duration: 1s;
+    animation-delay: 1.5s; 
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    opacity: 0; /* Animatsiya boshlanishidan oldin yashirish */
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IX. MEDIA SO'ROVLARI (Moslashuvchanlik - Responsive Design)
+|--------------------------------------------------------------------------
+*/
+
+/* planshetlar uchun */
+@media (max-width: 900px) {
+    /* Forma filtrlarini ikkita ustunga moslash */
+    .filters { 
+        display: grid; /* Agar avval grid bo'lmasa */
+        grid-template-columns: 1fr 1fr; 
+        gap: 12px; /* Kichikroq bo'shliq */
+    }
+    .filters input[type="text"],
+    .filters select,
+    form input, form select, form textarea {
+        width: 100%; /* To'liq kenglik */
+    }
+    table {
+        width: 98%; /* Kichik margin qoldirish */
+    }
+}
+
+/* mobil telefonlar uchun */
+@media (max-width: 600px) {
+    /* Filtrlar, kartalar va javoblarni bitta ustunga moslash */
+    .filters, .grid, .kitoblar, .answers { 
+        grid-template-columns: 1fr; 
+    }
+}

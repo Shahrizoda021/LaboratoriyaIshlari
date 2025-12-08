@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online kutubxona testlari — bitta sahifa</title>
+  <link rel="stylesheet" href="ARMstyle.css" />
+</head>
+<body>
+  
+<div class="app">
+
+  <div class="card" id="selectCard">
+    <h1>Online kutubxona — test platforma</h1>
+    <p class="muted">Kitobni tanlang, so‘ng 3 bosqichli testlarni bajaring: oson → o‘rta → qiyin. Har bosqichda kamida 10 ta savol bor.</p>
+
+    <div class="row" style="margin:14px 0 10px;">
+      <label for="book"><strong>Kitob:</strong></label>
+      <select id="book">
+        <option value="donkihot">Don Kihot</option>
+        <option value="1984">1984</option>
+        <option value="kichkinashahzoda">Kichkina Shahzoda</option>
+        <option value="alkimyogar">Alkimyogar</option>
+        <option value="garrypotter">Garri Potter: Sehrgarlar Toshi</option>
+        <option value="shaytanat">Shaytanat</option>
+        <option value="urushvatinchlik">Urush va tinchlik</option>
+        <option value="usta">Usta va Margarita</option>
+        <option value="otgankunlar">O‘tgan kunlar</option>
+        <option value="andishavagurur">Andisha va G‘urur</option>
+        <option value="boburnoma">Boburnoma</option>
+      </select>
+      <button class="primary" onclick="start()">Boshlash</button>
+    </div>
+    <div class="panel">
+      <div class="grid-2">
+        <div>
+          <p><strong>Tizim qoidalari:</strong></p>
+          <ul>
+            <li><span class="pill"><span class="level-pill">Oson</span> → <span class="level-pill">O‘rta</span> → <span class="level-pill">Qiyin</span></span></li>
+            <li>Har bosqichda 10 ta savol.</li>
+            <li>Natija:
+              <span class="pill">1–5: <span class="kbd">Qoniqarli</span></span>,
+              <span class="pill">6–8: <span class="kbd">Yaxshi</span></span>,
+              <span class="pill">9–10: <span class="kbd">A’lo</span></span>
+            </li>
+            <li>Faqat “A’lo” olsangiz keyingi bosqichga o‘tasiz. Aks holda qayta ishlaysiz.</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Maslahat:</strong></p>
+          <ul>
+            <li>Savollarni belgilang, yakunda “Bosqichni tugatish” tugmasini bosing.</li>
+            <li>Qayta ishlashda javoblarni o‘zgartirib ko‘ring.</li>
+            <li>Oxirida umumiy ko‘rsatkich chiqadi.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card hidden" id="testCard">
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <h2 id="title">Kitob — Bosqich</h2>
+        <p class="muted" id="subtitle">10 ta savol, javoblarni belgilang.</p>
+      </div>
+      <div style="min-width:200px;">
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <p class="muted" style="margin-top:6px;"><span id="progressText">0/10 belgilandi</span></p>
+      </div>
+    </div>
+    <div id="questions"></div>
+    <div class="footer">
+      <button class="ghost" onclick="backToSelect()">Kitobni almashtirish</button>
+      <button class="primary" onclick="finishLevel()">Bosqichni tugatish</button>
+      <button class="warn hidden" id="retryBtn" onclick="retryLevel()">Bosqichni qayta ishlash</button>
+      <button class="success hidden" id="nextBtn" onclick="nextLevel()">Keyingi bosqichga o‘tish</button>
+    </div>
+    <div id="resultPanel" class="panel hidden"></div>
+  </div>
+  <div class="card hidden" id="finalCard">
+    <h2>Test yakunlandi</h2>
+    <p id="finalText"></p>
+    <div class="footer">
+      <button class="primary" onclick="resetAll()">Yangi test boshlash</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB = {
+  donkihot: {
+    title: "Don Kihot",
+    levels: {
+      oson: [
+        {q:"Asar qahramoni nomi kim?", a:["Don Juan","Don Kihot","Dante","Migel de Servantes"], t:1},
+        {q:"Don Kihotning sodiq yo‘ldoshi?", a:["Migel de Servantes","Sancho Panza","Dante","Sherlok"], t:1},
+        {q:"Don Kihot ko‘p hollarda nimani dushman deb biladi?", a:["Shamol tegirmonlarini","Do'stlarini","Ritsarlarni","Qaroqchilarni"], t:0},
+        {q:"Asar janri?", a:["Drama","Ertak","Roman","Qissa"], t:2},
+        {q:"Muallif kim?", a:["Don Juan","Don Kihot","Dante","Migel de Servantes"], t:3},
+        {q:"Don Kihot o‘zini qanday ko‘radi?", a:["Ritsar","Shoir"], t:0},
+        {q:"Sancho Panza nima qiladi?", a:["Yordamchi va maslahatchi","Raqib"], t:0},
+        {q:"Don Kihotning maqsadi?", a:["Adolatni tiklash","Taxtni egallash"], t:0},
+        {q:"Asar asosan qaysi mamlakatda?", a:["Ispaniya","Fransiya"], t:0},
+        {q:"Tegirmonlar bilan kurashish nimani anglatadi?", a:["Xayoliy dushmanlar","Haqiqiy jang"], t:0},
+      ],
+      orta: [
+        {q:"Servantes asarni qachon yozgan?", a:["17-asr boshi","19-asr"], t:0},
+        {q:"Don Kihotning otining nomi?", a:["Rosinant","Bucefal"], t:0},
+        {q:"Dulcinea kim?", a:["Idealizatsiya qilingan seviklisi","Haqiqiy malika"], t:0},
+        {q:"Asarning markaziy g‘oyalaridan biri?", a:["Ideallar va reallik to‘qnashuvi","Falsafiy nihilizm"], t:0},
+        {q:"Sancho Panza ko‘proq qanday xarakter?", a:["Pragmatik","Romantik"], t:0},
+        {q:"Don Kihot qaysi ritsarlik an’analariga ergashadi?", a:["O‘rta asr ritsarligi","Uyg‘onish davri"], t:0},
+        {q:"Asar ohangi ko‘pincha?", a:["Satirik","Tragik"], t:0},
+        {q:"Don Kihotning qalqoni?", a:["Eski va oddiy","Qimmatbaho"], t:0},
+        {q:"Sancho ko‘pincha Don Kihotni qanday qiladi?", a:["Yerga tushiradi (realist qiladi)","Ruhlantiradi"], t:0},
+        {q:"Asarning tili?", a:["Ispancha","Ital’yanca"], t:0},
+      ],
+      qiyin: [
+        {q:"Servantesning hayoti ta’siri?", a:["Harbiy va asirlik tajribasi","Ruhoniy xizmat"], t:0},
+        {q:"Roman strukturasi?", a:["Ikki qismli","Bir qismli"], t:0},
+        {q:"Metafiksiya unsurlari mavjudmi?", a:["Ha","Yo‘q"], t:0},
+        {q:"Don Kihotning aqida va amali o‘rtasidagi ziddiyat?", a:["Kuchli","Zaif"], t:0},
+        {q:"Sancho afsonaviy orol boshqaradimi?", a:["Tasavvurda sinov sifatida","Haqiqatan"], t:0},
+        {q:"Asarda ijtimoiy tanqid bormi?", a:["Bor","Yo‘q"], t:0},
+        {q:"Don Kihotning yakuniy holati?", a:["Uyga qaytib hushyorlashadi","Qirollikka ko‘tariladi"], t:0},
+        {q:"Ritsarlik romanlariga munosabat?", a:["Parodiya va tanqid","Ulug‘lash"], t:0},
+        {q:"Narrator uslubi?", a:["Murakkab, o‘yinchi","Oddiy"], t:0},
+        {q:"Asar ta’siri?", a:["Yevropa adabiyotiga chuqur ta’sir","Cheklangan"], t:0},
+      ]
+    }
+  },
+  "1984": {
+    title: "1984",
+    levels: {
+      oson: [
+        {q:"Muallif kim?", a:["Jorj Oruell","Ray Bredberi"], t:0},
+        {q:"Asarda bosh qahramon?", a:["Uinston Smit","Gregor Samsa"], t:0},
+        {q:"Partiya rahbari kim?", a:["Katta Aka","Kichik Aka"], t:0},
+        {q:"Asosiy mavzu?", a:["Totalitarizm va nazorat","Romantik muhabbat"], t:0},
+        {q:"Tilga aralashuv nima deb ataladi?", a:["YangiTil (Newspeak)","EskiTil"], t:0},
+        {q:"Sevgi aloqasi kim bilan?", a:["Juliya","Ana Karenina"], t:0},
+        {q:"Haqiqat vazirligi nima qiladi?", a:["Tarixni qayta yozadi","Adolatni ta’minlaydi"], t:0},
+        {q:"Teleekranlar nimaga xizmat qiladi?", a:["Doimiy kuzatuv","Faqat ko‘ngilochar"], t:0},
+        {q:"Xoin kim bo‘lishi mumkin?", a:["O’Braen","Sancho"], t:0},
+        {q:"Yakun ohangi?", a:["Qo‘rqinchli, pessimist","Baxtli"], t:0},
+      ],
+      orta: [
+        {q:"YangiTil maqsadi?", a:["Fikr doirasini toraytirish","Savodxonlikni oshirish"], t:0},
+        {q:"2+2=5 nimani anglatadi?", a:["Haqiqatni majburlab o‘zgartirish","Matematik yangilik"], t:0},
+        {q:"Xona 101 nimaga mashhur?", a:["Eng dahshatli qo‘rquv joyi","Dam olish xonasi"], t:0},
+        {q:"Uinstonning ish joyi?", a:["Haqiqat vazirligi","Tinchlik vazirligi"], t:0},
+        {q:"Erishilgan muhabbatning taqdiri?", a:["Buziladi","Mustahkamlanadi"], t:0},
+        {q:"Prollar kim?", a:["Oddiy xalq qatlamlari","Partiya elitalari"], t:0},
+        {q:"Kuzatuv usullaridan biri?", a:["Teleekran","Drone"], t:0},
+        {q:"Uinston kundaligi nimani bildiradi?", a:["Ichki isyon","Rasmiy raport"], t:0},
+        {q:"O’Braen roli?", a:["Manipulyator va soxtakor","Sodiq do‘st"], t:0},
+        {q:"Asar janri?", a:["Distopiya","Utopya"], t:0},
+      ],
+      qiyin: [
+        {q:"Haqiqatning ijtimoiy konstruksiyasi?", a:["Partiya yaratadi","Erkin matbuot yaratadi"], t:0},
+        {q:"YangiTilning semantik strategiyasi?", a:["Sinonimlarni yo‘qotish","Neologizmlar qo‘shish"], t:0},
+        {q:"Xona 101 psixologiyasi?", a:["Individual eng katta qo‘rquv","Jamoaviy qo‘rquv"], t:0},
+        {q:"O’Braen dialektikasi?", a:["Mantiqni buzish orqali tobe qilish","Haqiqatni tiklash"], t:0},
+        {q:"Prollarning imkoniyati?", a:["Potensial isyon kuchi","Hech qanday imkon"], t:0},
+        {q:"Telos (yakuniy maqsad)?", a:["To‘liq nazorat","Erkin jamiyat"], t:0},
+        {q:"Sevgi va xotira holati?", a:["Yo‘q qilinadi","Yuksaltiriladi"], t:0},
+        {q:"Uinstonning ruhiy sinishi?", a:["To‘liq","Qisman"], t:0},
+        {q:"Katta Aka obrazi?", a:["Konstruktiv mif","Real shaxs"], t:0},
+        {q:"Asar ta’siri?", a:["Siyosiy til va nazorat tanqidi","Faqat romantika"], t:0},
+      ]
+    }
+  },
+
+
+  
+  kichkinashahzoda: {
+    title: "Kichkina Shahzoda",
+    levels: {
+      oson: [
+       
+  {q:"Muallif kim?", a:["Antuan de Sent-Ekzyuperi","Balzak","Tolstoy","Shakespeare"], t:0},
+  {q:"Rivoyatchi kasbi?", a:["O‘qituvchi","Uchuvchi","Shifokor","Matematik"], t:1},
+  {q:"Shahzoda qayerdan keladi?", a:["Mars","Oy","Asteroid B-612","Yer"], t:2},
+  {q:"Atirgul kim?", a:["Dushman","Qo‘shni","Begona","Sevimli guli"], t:3},
+  {q:"Tulka nima qiladi?", a:["Yo‘l ko‘rsatmaydi","Do‘stlik sirini o‘rgatadi","Ov qiladi","Yordam bermaydi"], t:1},
+  {q:"Ilon roli?", a:["Yo‘ldan ozdiradi","Yerga qaytishni ta’minlaydi","Himoya qiladi","Do‘st bo‘ladi"], t:1},
+  {q:"Qum sahrosidagi uchuvchi?", a:["Shahar quradi","Ov qiladi","Nosozlikni tuzatadi","Sayohat qiladi"], t:2},
+  {q:"Yulduzlar nimani anglatadi?", a:["Boylik","Xotira va do‘stlik","Ilm","Sarguzasht"], t:1},
+  {q:"Shahzoda sayohati ma’nosi?", a:["Pul topish","Hokimiyat","Sarguzasht","Kattalarning g‘ayrioddiy odatlarini ko‘rsatish"], t:3},
+  {q:"Asar janri?", a:["Detektiv","Roman","Tragediya","Falsafiy ertak"], t:3}
+    
+      ],
+      orta: 
+       [
+  {q:"Tulka so‘zi 'ehlash' nimani anglatadi?", a:["Bog‘lanish va mas’uliyat","Ov qilish","Do‘stlik","Yordam"], t:0},
+  {q:"Atirgulning hissiy holati?", a:["Mutlaq kamtarlik","Kapriz va mehr talab","Qo‘rquv","Xursandchilik"], t:1},
+  {q:"Kattalar tasviri?", a:["Mehribon","Raqamlarga berilgan, tor tafakkur","Ijodkor va erkin","Oddiy"], t:1},
+  {q:"Asteroid B-612 detali?", a:["Fransuz astronomi","Nemis astronomi","Amerikalik","Turk astronomi kashf etadi"], t:3},
+  {q:"Shahzoda ko‘rgan 'qirol' nimani ko‘rsatadi?", a:["Adolatli boshqaruv","Bo‘sh hokimiyat","Kuchli davlat","Oddiy odam"], t:1},
+  {q:"Jalabchi va ichkilikboz obrazlari?", a:["Mas’uliyatni oshiradi","Do‘stlik","Absurd siklni ko‘rsatadi","Haqiqat"], t:2},
+  {q:"Biznesmen obrazi?", a:["Ilm bilan shug‘ullanadi","Savdogar","Yulduzlarni sanashga berilgan","Shoir"], t:2},
+  {q:"Chirag yoquvchi?", a:["O‘qituvchi","Shifokor","Ijodkor","Ishga sodiq, lekin ma’nosiz rutina"], t:3},
+  {q:"Geograf obrazi?", a:["Har yerga boradi","Kitob yozadi","Amalda sayohat qilmaydi","O‘qitadi"], t:2},
+  {q:"Til ohangi?", a:["Qo‘pol","Hazil","Oddiy","Samimiy va mulohazali"], t:3}
+
+      ],
+      qiyin: [
+       
+  {q:"Asarning markaziy metaforasi?", a:["Ko‘rish — yurak bilan ko‘rish","Kuch — kuch bilan javob","Pul","Hokimiyat"], t:0},
+  {q:"'Muhim narsalarni ko‘z ko‘rmaydi' qaysi g‘oya?", a:["Raqamlar ustunligi","Ichki idrokning ustunligi","Pul","Kuch"], t:1},
+  {q:"Atirgul va Shahzoda munosabati?", a:["Utilitar foyda","Do‘stlik","Mas’uliyat va muhabbat saboqlari","Hokimiyat"], t:2},
+  {q:"Uchuvchining sahrodagi tajribasi?", a:["Bo‘sh vaqt","Pul","Kuch","O‘zini anglash va do‘stlik"], t:3},
+  {q:"Tulka bilan uchrashuv natijasi?", a:["Bekor","Ehlash — alohida aloqaning qiymati","Do‘stlik","Pul"], t:1},
+  {q:"Yulduzlar yakunda?", a:["Yo‘lni adashtiradi","Xotirani yoritadi","Pul","Kuch"], t:1},
+  {q:"Ilonning ramzi?", a:["Yovuzlik","Pul","O‘tish eshigi (yurtiga qaytish)","Kuch"], t:2},
+  {q:"Narrativ uslub?", a:["Realistik detektiv","Oddiy","Hazil","Minimalistik, ramziy"], t:3},
+  {q:"Bolalik va kattalik qarama-qarshiligi?", a:["Haqiqiy kuch vs. kuchsizlik","Pul","Kuch","Ko‘ngil ko‘zi vs. kutilma"], t:3},
+  {q:"Asar ta’siri?", a:["Faqat mahalliy ertak","Dunyo bo‘ylab madaniy fenomen","Pul","Kuch"], t:1}
+
+      ]
+    }
+  },
+
+  alkimyogar: {
+    title: "Alkimyogar",
+    levels: {
+      oson: [
+        {q:"Bosh qahramonning ismi?", a:["Santiago","Paulo","Marselo","Hasan"], t:0},
+        {q:"Santiago kasbi?", a:["Cho‘pon","Tikuvchi","Savdogar","Rassom"], t:0},
+        {q:"Santiago qayerga sayohat qiladi?", a:["Piramidalar","Parij","Moskva","Buyuk Britaniya"], t:0},
+        {q:"Asar muallifi?", a:["Paulo Koelo","Jorj Oruell","Servantes","Ekzyuperi"], t:0},
+        {q:"Santiago nima izlaydi?", a:["Xazina","Ota-onasi","Boylik","Bilim"], t:0},
+        {q:"Cho‘pon tush ko‘rgan joy?", a:["Eski cherkov xarobasi","Voha","Do‘kon","Uy"], t:0},
+        {q:"O‘z shaxsiy taqdirini topish tushunchasi?", a:["Dunyoviy ruh","A’lo maqsad","Muhabbat","Xayol"], t:1},
+        {q:"Santiago qayerda ishlaydi?", a:["Billur do‘konida","Kutubxonada","Bozorda","Cho‘ponlikda"], t:0},
+        {q:"Qahramonga maslahat beruvchi donishmand?", a:["Malxisedek","Ilon","Tulki","Geograf"], t:0},
+        {q:"U qiz bilan uchrashgan joy?", a:["Voha","Madrid","Cherkov","Bozor"], t:0}
+      ],
+      orta: [
+        {q:"Melxisedekning (Keksa shoh) vazifasi?", a:["Yaxshi ishlashni o‘rgatish","Shaxsiy taqdirni tanitish","Pul berish","Ovqatlantirish"], t:1},
+        {q:"O’lik dengizga tushadigan daryo haqidagi dars?", a:["Yo‘qotish va berish","Qaytish","Falsafa","Siyosat"], t:0},
+        {q:"Vohada topilgan ayolning ismi?", a:["Fotima","Yasmina","Sofiya","Maryem"], t:0},
+        {q:"Alkimyogarning asosiy vazifasi?", a:["Metallar qiymatini oshirish","Oddiy narsalarni oltin qilish","Hayot eliksirini yaratish","Cho‘ponlik"], t:1},
+        {q:"Cho‘ponning cho‘ponlikni tashlashiga sabab?", a:["Tush","Kitob","Pul","Qo‘rqish"], t:0},
+        {q:"Santiago nima bilan to‘laydi?", a:["O‘nta qo‘yining o‘ndan bir qismi","Pul","Kitoblar","Mol"], t:0},
+        {q:"Alkimyogarning 'Urim va Tumim' toshlari?", a:["Ha va Yo‘q","Oltin","Qora va Oq","Yashil va Qizil"], t:2},
+        {q:"Asarning asosiy g‘oyasi?", a:["Orzularni amalga oshirish","Boy bo‘lish","Siyosat","Oila"], t:0},
+        {q:"Cho‘pon toshlardan foydalangan joy?", a:["Billur do‘konida","Qum sahrosida","Uyda","Vohada"], t:0},
+        {q:"Asarda uchraydigan 'Dunyoviy Ruh' nima?", a:["Yerning ruhi","Odamlarning ruhi","Olamning birligi","Hayvonlar ruhi"], t:2}
+      ],
+      qiyin: [
+        {q:"Alkimyogarning 'Buyuk ish'ining ma’nosi?", a:["Faqat moddiy oltin yaratish","Ruhni va moddani yuksaltirish","Kitob yozish","Urush"], t:1},
+        {q:"Fotima obrazining asosiy maqsadi?", a:["Muhabbat sinovi","Yordamchi","Ona","Qo‘rqinch"], t:0},
+        {q:"Asarda shaxsiy taqdirga to‘sqinlik qiluvchi omil?", a:["Qo‘rquv","Oila","Pul","Jamiyat"], t:0},
+        {q:"Cho‘ponning ismini qaysi tarixiy shaxs nomiga qo‘ygan?", a:["Ispaniyalik Avliyo Santyago","O’zbek","Arab","Hind"], t:0},
+        {q:"Alkimyogar San‘ati tushunchasi?", a:["Faqat oltin yaratish","O‘zgartirish, kamolotga erishish san’ati","Urush","Yaxshilik"], t:1},
+        {q:"Asarda vaqt qanday tasvirlangan?", a:["Chiziqli","Doira","Yo‘q","Sezgi"], t:1},
+        {q:"Santiago cho‘pon bo‘lishidan oldin nima qiladi?", a:["Kutubxonada o‘qiydi","Maktabda o‘qituvchi","Bog‘bon","Bozor"], t:0},
+        {q:"Alkimyogarning yashirin sirlari?", a:["Faqat billur idishlar","Faqat xazina","Yo‘q","Yo‘q"], t:2},
+        {q:"Kitobning boshlanishi va oxiri bir-biriga bog‘lanishi?", a:["Xazina oxir-oqibat avvalgi joyda topiladi","Yo‘q","Boshqa joyda","Boshqa davlatda"], t:0},
+        {q:"Asar ohangi?", a:["Realistik","Sarkastik","Falsafiy, ilhomlantiruvchi","G‘amgin"], t:2}
+      ]
+    }
+  },
+
+  garrypotter: {
+    title: "Garri Potter va Sehrgarlar Toshi",
+    levels: {
+      oson: [
+        {q:"Garri Potterning do‘stlari?", a:["Ron va Germiona","Jeyms va Lily","Draco","Snape"], t:0},
+        {q:"Sehrgarlar maktabining nomi?", a:["Hogwarts","Beauxbatons","Durmstrang","Ilvermorny"], t:0},
+        {q:"Sehrgarlar toshini qidiruvchi asosiy yovuz qahramon?", a:["Voldemort","Dumbledore","Hagrid","Potter"], t:0},
+        {q:"Garrining jarohati qayerda?", a:["boshida","Qo‘lida","Bo‘ynida","Oyog‘ida"], t:0},
+        {q:"Sehrgarlar toshining vazifasi?", a:["Oltin yasash va umrni uzaytirish","Pul topish","Uchish","Yashash"], t:0},
+        {q:"Garriga xat olib kelgan narsa?", a:["Boyqush","Qush","Pochta xati","Odam"], t:0},
+        {q:"Garri qaysi oilada yashaydi?", a:["Dursley","Uesli","Grindevold","Gost"], t:0},
+        {q:"Kviddich o‘yini qayerda o‘ynaladi?", a:["Uchib yuruvchi supurgida","Yerda","Suvda","Chopqir otda"], t:0},
+        {q:"Hogwartsning direktorining ismi?", a:["Albus Dumbledore","Snape","Minerva","Hagrid"], t:0},
+        {q:"Garri qaysi yotoqxonaga tushadi?", a:["Griffindor","Slizerin","Xafflpaff","Ravenklou"], t:0}
+      ],
+      orta: [
+        {q:"Voldemortning nomi aslida nima?", a:["Tom Riddle","Draco Malfoy","Ron Uesli","Severus Snape"], t:0},
+        {q:"Hagridning kasbi?", a:["O’rmon qo‘riqchisi","Sehrli hayvonlarni parvarishlash","Professor","Kutubxonachi"], t:0},
+        {q:"Uch boshli itning nomi?", a:["Fluffy","Norbert","Hedwig","Pads"], t:0},
+        {q:"Sehrgarlar toshini himoyalovchi eng so‘nggi to‘siq?", a:["Mirror of Erised","Riddle","Shaxmat o‘yini","Troll"], t:0},
+        {q:"Garri sehrgarlar toshini qayerda topadi?", a:["Erised ko‘zgusi","Ta’qiqlangan o‘rmonda","Snape xonasida","Hagridning kulbasida"], t:0},
+        {q:"Sehrli do‘konlar joylashgan ko‘cha?", a:["Diagon Alley","Privet Drive","Hogsmeade","Nocturne Alley"], t:0},
+        {q:"Snape qaysi fandan dars beradi?", a:["Eksir tayyorlash (Potions)","Qorong‘u san’atdan himoya","O‘simlikshunoslik","Astronimiya"], t:0},
+        {q:"Garri nechanchi platformadan poyezdga chiqadi?", a:["9 ¾","10","8 ½","7"], t:0},
+        {q:"Kitobning birinchi o‘qituvchisi?", a:["Professor Quirrell","Snape","Flitwick","Sprout"], t:0},
+        {q:"Garri Potterni tashlab ketgan ota-onasi qanday vafot etgan?", a:["Voldemort o‘ldirgan","Avtohalokat","Kasallik","Qarilik"], t:0}
+      ],
+      qiyin: [
+        {q:"Sehrgarlar toshini yaratgan alkimyogar?", a:["Nicolas Flamel","Dumbledore","Grindelwald","Hagrid"], t:0},
+        {q:"Sehrgarlar toshi asarning markaziy ramzi nima?", a:["O’lmaslik istagi","Boylik","Kuch","Dahshat"], t:0},
+        {q:"Erised ko‘zgusining maqsadi?", a:["Eng katta istakni ko‘rsatish","Yo‘l ko‘rsatish","Dushmanlarni ko‘rish","Dars berish"], t:0},
+        {q:"Quirrellning asosiy xarakteristikasi?", a:["Voldemortning ruhi tanasida bo‘lgan","Snapega yordam bergan","Yaxshi odam","Qo‘rqmas"], t:0},
+        {q:"Dumbledore tomonidan 'eng buyuk ixtiro' deb hisoblangan narsa?", a:["Sevgi","Tosh","Asa","Kitob"], t:0},
+        {q:"Kitobning asosiy g‘oyalaridan biri?", a:["Muhabbat va fidoyilik kuchi","Pul","Hokimiyat","Siyosat"], t:0},
+        {q:"Garri toshni ko‘zgudan qanday oladi?", a:["O’z istagiga ko‘ra uning cho‘ntagiga tushadi","Ron beradi","Germiona topadi","Dumbledore beradi"], t:0},
+        {q:"Kviddichdagi 'Snitch' nima?", a:["Eng muhim to‘p, uni ushlab o‘yinni tugatish","Katta to‘p","Darvozabon","Maydon"], t:0},
+        {q:"Asarda do‘stlik mavzusi qanday rol o‘ynaydi?", a:["Hamma qiyinchilikni yengish uchun asos","Ikkinchi darajali","Yo‘q","Yomon"], t:0},
+        {q:"Garri Potterning ot-onasi himoya sehrining nomi?", a:["Avada Kedavra","Crucio","Patronus","Yo‘q"], t:0}
+      ]
+    }
+  },
+
+  shaytanat: {
+    title: "Shaytanat (Tohir Malik)",
+    levels: {
+      oson: [
+        {q:"Asar muallifi?", a:["Tohir Malik","O‘tkir Hoshimov","Abdulla Qodiriy","Chingiz Aytmatov"], t:0},
+        {q:"Asarning bosh qahramonlaridan biri?", a:["Mirzo Ulug‘bek","Jaloliddin Manguberdi","Asadbek","G‘ulom"], t:2},
+        {q:"Asar janri?", a:["Detektiv, kriminal roman","Muhabbat romani","Fantastika","Tarixiy doston"], t:0},
+        {q:"Asarda qaysi davr tasvirlangan?", a:["Mustaqillik yillari","Qadimgi davr","Sovet davri","O‘rta asr"], t:0},
+        {q:"Asarda jinoyat olami qanday tasvirlangan?", a:["Ijtimoiy-siyosiy","Oddiy","Yo‘q","Faqat yomonlik"], t:0},
+        {q:"Mirzayev kim?", a:["Politsiya xodimi","Jinoyatchi","O‘qituvchi","Bog‘bon"], t:0},
+        {q:"Asadbekning hayoti nima bilan bog‘liq?", a:["Jinoyat olami","Oila","Adolat","Faqat pul"], t:0},
+        {q:"Asarda adolat mavzusi qanday rol o‘ynaydi?", a:["Markaziy","Ikkinchi darajali","Yo‘q","Sezgi"], t:0},
+        {q:"Tohir Malikning boshqa asari?", a:["Falak","Yulduzli tunlar","Mehrigiyo","O‘tgan kunlar"], t:0},
+        {q:"Asarda odamlarning ichki ziddiyatlari nima sabab?", a:["Shaytoniy vasvasalar","Pul","Oila","Hayot"], t:0}
+      ],
+      orta: [
+        {q:"Asadbek obrazining murakkabligi nimada?", a:["Yaxshilik va yomonlik kurashi","Faqat pul","Siyosat","Oila"], t:0},
+        {q:"Mirzayevning maqsadi?", a:["Jinoyatni ochish, adolatni tiklash","Boy bo‘lish","Sayohat","Kitob yozish"], t:0},
+        {q:"Asarda 'Shaytanat' so‘zining ramziy ma’nosi?", a:["Iblisning hokimiyati, yovuzlikning tarqalishi","Yaxshilik","Oila","Mehnat"], t:0},
+        {q:"Asarning ijtimoiy tanqid yo‘nalishi?", a:["Korrupsiya va jamiyatning chirishi","Siyosiy","Yo‘q","Oddiy"], t:0},
+        {q:"Asadbekning kelajakdagi taqdiri?", a:["Ijobiy","Fojeaviy","Oddiy","Boy"], t:1},
+        {q:"Asarda muhabbat mavzusi qanday aks etgan?", a:["Qo‘shma, oddiy","Muhim, lekin jinoyat ortida qoladi","Yo‘q","Markaziy"], t:1},
+        {q:"Asarning tili va uslubi?", a:["Oddiy, xalq tili","Akademik","Fantastik","Qiyin"], t:0},
+        {q:"Tohir Malik qaysi janrda mashhur?", a:["Detektiv va kriminal","She’riyat","Drama","Tarix"], t:0},
+        {q:"Asadbekning boshqa qahramonlar bilan munosabati?", a:["Murakkab, ziddiyatli","Oddiy","Do‘stona","Yaxshi"], t:0},
+        {q:"Asar qismlarga bo‘linganmi?", a:["Ha","Yo‘q","Faqat ikkiga","Faqat bittaga"], t:0}
+      ],
+      qiyin: [
+        {q:"Romanning asosiy falsafiy g‘oyasi?", a:["Insonning shaytoniy vasvasalar oldidagi ojizligi","Oila","Pul","Kuch"], t:0},
+        {q:"Asadbek obrazining prototipi bormi?", a:["Qisman ha, real hayotdan olingan","Yo‘q","Faqat o‘ylab topilgan","Siyosiy"], t:0},
+        {q:"Asarning zamonaviy jamiyatga ta’siri?", a:["Kriminal olamni fosh qilish","Siyosiy","Yo‘q","Oddiy"], t:0},
+        {q:"Mirzayevning obrazi qanday ramzni ifodalaydi?", a:["Adolat va qonun kuchi","Shayton","Oila","Pul"], t:0},
+        {q:"Asarning nomi (Shaytanat) nima uchun tanlangan?", a:["Yovuzlikning to‘liq hukmronligi","Pul","Oila","Yaxshilik"], t:0},
+        {q:"Asar yakunidagi Asadbekning ruhiy holati?", a:["Tavba va afsus","Boylik","Kuch","G‘olib"], t:0},
+        {q:"Asarda din va axloq masalalari qanday ko‘rsatilgan?", a:["Yovuzlikka qarshi asosiy himoya","Yo‘q","Siyosiy","Oddiy"], t:0},
+        {q:"Tohir Malikning asarlari qaysi adabiy oqimga mansub?", a:["Realizm","Fantastika","Modernizm","Postmodernizm"], t:0},
+        {q:"Asarda qaysi psixologik holatlar ustunlik qiladi?", a:["Isyon, qo‘rquv, adolat izlash","Tinchlik","Baxt","Oddiylik"], t:0},
+        {q:"Kitobning bosh maqsadi?", a:["Kriminal hayotdan uzoq bo‘lishga chaqirish","Pul","Siyosat","Oila"], t:0}
+      ]
+    }
+  },
+
+  urushvatinchlik: {
+    title: "Urush va tinchlik (Lev Tolstoy)",
+    levels: {
+      oson: [
+        {q:"Muallif kim?", a:["Lev Tolstoy","Fyodor Dostoyevskiy","Anton Chexov","Ivan Turgenev"], t:0},
+        {q:"Asar qaysi davr voqealari haqida?", a:["Napaleon urushlari (1805-1812)","Birinchi Jahon Urushi","Ikkinchi Jahon Urushi","O‘rta asr"], t:0},
+        {q:"Asosiy qahramonlardan biri (Bezuxov)?", a:["Pyotr","Andrey","Nikolay","Boris"], t:0},
+        {q:"Asosiy qahramonlardan biri (Bolkoniskiy)?", a:["Andrey","Pyotr","Nikolay","Boris"], t:0},
+        {q:"Roman qayerda joylashgan?", a:["Rossiya va Yevropa","Angliya","AQSh","Osiyo"], t:0},
+        {q:"Asar hajmi?", a:["Katta (epopeya)","Kichik (novella)","O‘rta","Juda kichik"], t:0},
+        {q:"Roman qanday g‘oyalarni o‘z ichiga oladi?", a:["Tarix, oila, muhabbat, falsafa","Faqat urush","Faqat muhabbat","Faqat pul"], t:0},
+        {q:"Roman janri?", a:["Tarixiy roman-epopeya","Detektiv","Fantastika","Kriminal"], t:0},
+        {q:"Pyotrning meros olishi?", a:["Boylikka ega bo‘ladi","Qashshoqlashadi","Askarga ketadi","Siyosatchi bo‘ladi"], t:0},
+        {q:"Asarda qaysi rus sarkardasi tasvirlangan?", a:["Kutuzov","Suvorov","Yermolov","Zhukov"], t:0}
+      ],
+      orta: [
+        {q:"Tolstoyning 'xalq ruhi' tushunchasi nimani anglatadi?", a:["Oddiy xalqning urushdagi ruhiyati","Aslzodalar","Siyosatchilar","Pul"], t:0},
+        {q:"Andrey Bolkonskiyning asosiy orzusi?", a:["Harbiy shon-sharaf","Boylik","Siyosat","Oila"], t:0},
+        {q:"Natasha Rostova obrazi nimani ifodalaydi?", a:["Hayotiylik, muhabbat qidiruvi","Faqat go‘zallik","Kuch","Qo‘rquv"], t:0},
+        {q:"Borodino jangi romanda qanday o‘rin tutadi?", a:["Markaziy, burilish nuqtasi","Oddiy epizod","Yo‘q","Siyosiy"], t:0},
+        {q:"Pyotr Bezuxovning ruhiy izlanishlari?", a:["Inson ma’nosini topish, Masonlik","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Tolstoyning tarixga munosabati?", a:["Buyuk shaxslarning roli past","Faqat shaxslar","Siyosat","Boylik"], t:0},
+        {q:"Pyotr qaysi joyda asirlikda bo‘ladi?", a:["Fransuzlar","Rossiya","Angliya","Italiya"], t:0},
+        {q:"Asarda qaysi janglar keng tasvirlangan?", a:["Austerlits va Borodino","Stalingrad","Vaterloo","Troy"], t:0},
+        {q:"Kutuzov obrazi qanday talqin qilingan?", a:["Xalq donoligi va oddiyligi","G‘ururli general","Kuchsiz","Qo‘rqoq"], t:0},
+        {q:"Romandagi asosiy oilalar?", a:["Bezuxovlar, Bolkonskiylar, Rostovlar","Smitlar, Jonsonlar","Potterlar","Uesli"], t:0}
+      ],
+      qiyin: [
+        {q:"Tolstoyning 'zarurat qonuni' falsafasi?", a:["Tarixning mustaqil, ilohiy kuchlar tomonidan boshqarilishi","Shaxslarning irodasi","Siyosat","Pul"], t:0},
+        {q:"Andreyning 'osmoni' tushunchasi?", a:["Ma’naviy uyg‘onish, abadiylik hissi","Faqat samoviy jism","Urush","Siyosat"], t:0},
+        {q:"Natashaning Pyotrga turmushga chiqishi nimani ifodalaydi?", a:["Ma’naviy va oilaviy yechim","Pul","Siyosat","Urush"], t:0},
+        {q:"Tolstoyning 'qahramon' tushunchasi?", a:["Kichik odam, oddiy askar","Buyuk generallar","Siyosatchilar","Pul"], t:0},
+        {q:"Asarda muhabbatning shakllari?", a:["Ruhiy, oilaviy, jismoniy","Faqat romantik","Yo‘q","Siyosiy"], t:0},
+        {q:"Tolstoyning urushga munosabati?", a:["Qo‘rqinchli, ma’nosiz qirg‘in","Faqat shon-sharaf","Siyosat","Boylik"], t:0},
+        {q:"Pyotrning masonlik tajribasi?", a:["Ma’naviy izlanishga olib keladi","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Asarda qaysi tillar ishlatilgan?", a:["Ruscha va Fransuzcha","Faqat ruscha","Faqat fransuzcha","Inglizcha"], t:0},
+        {q:"Tolstoyning tarixiy determinizm g‘oyasi?", a:["Ixtiyor erkinligini inkor etish","Kuchli shaxslar","Siyosat","Boylik"], t:0},
+        {q:"Asar yakuni?", a:["Keng oilaviy hayot va tinchlik","Urush","Siyosat","Pul"], t:0}
+      ]
+    }
+  },
+
+  usta: {
+    title: "Usta va Margarita (M. Bulgakov)",
+    levels: {
+      oson: [
+        {q:"Asar muallifi?", a:["Mixail Bulgakov","Lev Tolstoy","Fyodor Dostoyevskiy","Anton Chexov"], t:0},
+        {q:"Asosiy yovuz qahramon (shayton)?", a:["Woland","Yosha","Korovyev","Azazello"], t:0},
+        {q:"Bosh qahramonlardan biri (ayol)?", a:["Margarita","Yelena","Natasha","Sofiya"], t:0},
+        {q:"Asar janri?", a:["Satirik, mistik roman","Detektiv","Tarixiy","Realistik"], t:0},
+        {q:"Wolandning yordamchilari?", a:["Fagot, Begemot, Azazello","Pyotr, Andrey, Nikolay","Ron, Garri, Germiona","Shayton, Tulki, Atirgul"], t:0},
+        {q:"Asar qayerda boshlanadi?", a:["Moskva (Patriarx hovuzlari)","Parij","London","Rim"], t:0},
+        {q:"Usta nima yozadi?", a:["Roman (Pontiy Pilat haqida)","She’r","Drama","Gazeta maqolasi"], t:0},
+        {q:"Asardagi mushukning ismi?", a:["Begemot","Fagot","Azazello","Woland"], t:0},
+        {q:"Ierusalim qismidagi bosh qahramon?", a:["Pontiy Pilat","Yosha","Woland","Usta"], t:0},
+        {q:"Usta qayerda yashaydi?", a:["Jinni xonasi","Kvartira","Uy","Kutubxona"], t:0}
+      ],
+      orta: [
+        {q:"Berliozning vafoti?", a:["Tramvay g‘ildiragi ostida","Otilib ketgan","Kasallik","Qarilik"], t:0},
+        {q:"Margaritaning qanday qobiliyati bor?", a:["Uchish va ko‘rinmas bo‘lish","Pul topish","Siyosat","Urush"], t:0},
+        {q:"Pontiy Pilatning asosiy ziddiyati?", a:["Burch va vijdon","Pul","Siyosat","Urush"], t:0},
+        {q:"Varyete teatrida Woland nima qiladi?", a:["Sehrli shou, pul tarqatish","Siyosat","Urush","Dars berish"], t:0},
+        {q:"Usta nega romanini yoqib yuboradi?", a:["Tanqid tufayli","Yo‘q","Baxtdan","Pul topish"], t:0},
+        {q:"Ivan Bezdomniyning holati?", a:["Jinni xonaga tushadi","Siyosatchi bo‘ladi","Yozuvchi bo‘ladi","Boy bo‘ladi"], t:0},
+        {q:"Asardagi satira qaysi mavzularga qaratilgan?", a:["Byurokratiya, xurofot, Moskva jamiyati","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Woland qanday ramzni ifodalaydi?", a:["Yovuzlik va adolat timsoli","Yaxshilik","Oila","Mehnat"], t:0},
+        {q:"Margaritaning balda ishtiroki?", a:["Asosiy uy egasi bo‘ladi","Qo‘rqoq","Yo‘q","Siyosat"], t:0},
+        {q:"Leviy Matvey kim?", a:["Yoshaning shogirdi","Pilato","Usta","Woland"], t:0}
+      ],
+      qiyin: [
+        {q:"Asarning 'qo‘lyozmalar yonmaydi' g‘oyasi?", a:["Ijodning abadiyligi","Pul","Siyosat","Urush"], t:0},
+        {q:"Moskva voqealari va Ierusalim voqealari munosabati?", a:["Bir-birini aks ettiruvchi parallel hikoyalar","Yo‘q","Boshqa joyda","Boshqa davlatda"], t:0},
+        {q:"Pilatusning jazosi?", a:["Abadiy azob","Pul","Siyosat","Tinchlik"], t:0},
+        {q:"Bulgakovning ijodiy uslubi?", a:["Magik realizm","Faqat realizm","Fantastika","She’riyat"], t:0},
+        {q:"Asardagi Moskva qahramonlari qanday qilib jazolanadi?", a:["O’z ayblari orqali","Pul","Siyosat","Urush"], t:0},
+        {q:"Usta va Margaritaga berilgan 'tinchlik' nima?", a:["Faqat jannat emas, balki qulaylik","Pul","Siyosat","Urush"], t:0},
+        {q:"Romandagi Begemot mushugining ramzi?", a:["Anarxiya, hazil, shaytoniy yordamchi","Oila","Pul","Kuch"], t:0},
+        {q:"Wolandning 'adolat' tushunchasi?", a:["Shaxsiy, mantiqiy adolat","Qonun","Siyosat","Urush"], t:0},
+        {q:"Yosha Xa-Nosri obrazining diniy-falsafiy ma’nosi?", a:["Isoning ramziy tasviri","Yo‘q","Siyosat","Pul"], t:0},
+        {q:"Asarda qo‘rquv va erkinlik masalasi?", a:["Markaziy, qahramonlar tanlov oldida","Yo‘q","Siyosat","Pul"], t:0}
+      ]
+    }
+  },
+
+  otgankunlar: {
+    title: "O‘tgan kunlar (Abdulla Qodiriy)",
+    levels: {
+      oson: [
+        {q:"Muallif kim?", a:["Abdulla Qodiriy","Cho‘lpon","Fitrat","Usmon Nosir"], t:0},
+        {q:"Asosiy qahramon (erkak)?", a:["Otabek","Mirzakarim","Hasanali","Yusufbek"], t:0},
+        {q:"Asosiy qahramon (ayol)?", a:["Kumushbibi","Zaynab","Xumor","Gulsara"], t:0},
+        {q:"Asar janri?", a:["Tarixiy roman","Fantastika","Detektiv","Kriminal"], t:0},
+        {q:"Otabekning otasi?", a:["Yusufbek Hoji","Mirzakarim Qutidor","Hasanali","Zayid"], t:0},
+        {q:"Asarda qaysi davr tasvirlangan?", a:["XIX asrning ikkinchi yarmi","VIII asr","XX asr","XXI asr"], t:0},
+        {q:"Otabek qayerda yashaydi?", a:["Toshkent","Qo‘qon","Buxoro","Xiva"], t:0},
+        {q:"Kumushning otasi?", a:["Mirzakarim Qutidor","Yusufbek Hoji","Hasanali","Zayid"], t:0},
+        {q:"Zaynab kim?", a:["Otabekning ikkinchi xotini","Otabekning qizi","Kumushning dugonasi","Mirzakarimning xotini"], t:0},
+        {q:"Asar qanday yakunlanadi?", a:["Fojeaviy","Baxtli","Oddiy","Siyosiy"], t:0}
+      ],
+      orta: [
+        {q:"Roman yozilgan yil?", a:["1920-yillar boshi","1940-yillar","1960-yillar","1980-yillar"], t:0},
+        {q:"Asarda qaysi urf-odatlar tanqid qilingan?", a:["Ko‘pxotinlilik, xotin-qizlar huquqi","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Qodiriyning romani qaysi adabiy oqimga mansub?", a:["Jadid adabiyoti","Realizm","Fantastika","Modernizm"], t:0},
+        {q:"Otabekning birinchi safari maqsadi?", a:["Savdo, Kumushni ko‘rish","Siyosat","Urush","Pul"], t:0},
+        {q:"Kumushning o‘limi sababi?", a:["Zahar (qaynonasi Zaynabning onasi)","Kasallik","Qarilik","Urush"], t:0},
+        {q:"Asosiy ziddiyat nima?", a:["Eski odatlar va yangi dunyo, muhabbat","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Otabekning otasining maqsadi?", a:["O‘g‘lining baxti, lekin an’analar","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"O‘zbek romanchiligining asoschisi?", a:["Abdulla Qodiriy","Cho‘lpon","Fitrat","Usmon Nosir"], t:0},
+        {q:"Hasanali kim?", a:["Otabekning sodiq yordamchisi","Dushman","Qaynota","Savdogar"], t:0},
+        {q:"Asarda qaysi xonliklar ta’siri bor?", a:["Qo‘qon va Buxoro","Xiva","Xorazm","Samarqand"], t:0}
+      ],
+      qiyin: [
+        {q:"Romanning asosiy sotsial-falsafiy g‘oyasi?", a:["Milliy o‘zlikni anglash, ijtimoiy adolat","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Qodiriyning romandagi ayollarning taqdiriga munosabati?", a:["Himoya, e’tibor, afsus","Yo‘q","Siyosat","Pul"], t:0},
+        {q:"Asarda adabiy tilning rivojlanishi?", a:["Xalq tili va adabiy tilning uyg‘unlashuvi","Faqat xalq tili","Faqat adabiy til","Arabcha"], t:0},
+        {q:"Otabekning qahramonligi nimada?", a:["O‘z baxti uchun kurash, o‘jarlik","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Asarda siyosiy holat qanday aks etgan?", a:["Xonliklararo ziddiyatlar, Rossiya ta’siri","Yo‘q","Faqat tinchlik","Oddiy"], t:0},
+        {q:"Roman orqali Qodiriyning maqsadi?", a:["Milliy uyg‘onish, eski odatlarni tanqid qilish","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Zaynab obrazining tragikligi nimada?", a:["Hasad, muhabbatga erisha olmaslik","Baxt","Siyosat","Pul"], t:0},
+        {q:"Asarning nomi (O‘tgan kunlar) ramziy ma’nosi?", a:["Yo‘qotilgan baxt, o‘tmishning achchiq saboqlari","Yaxshilik","Oila","Mehnat"], t:0},
+        {q:"Qodiriyning boshqa asarlari?", a:["Mehrigiyo","Falak","Yulduzli tunlar","Shaytanat"], t:0},
+        {q:"Romandagi voqealar qanchalik realistik?", a:["Tarixiy faktlarga asoslangan","Faqat xayol","Fantastik","Siyosiy"], t:0}
+      ]
+    }
+  },
+
+  andishavagurur: {
+    title: "Andisha va G‘urur (Jane Austen)",
+    levels: {
+      oson: [
+        {q:"Muallif kim?", a:["Jane Austen","Charlotte Bronte","Emily Bronte","George Eliot"], t:0},
+        {q:"Asosiy qahramon?", a:["Elizabeth Bennet","Jane Bennet","Lydia Bennet","Caroline Bingley"], t:0},
+        {q:"Elizabeth sevgan bosh qahramon?", a:["Mr. Darcy","Mr. Bingley","Mr. Collins","Wickham"], t:0},
+        {q:"Asar janri?", a:["Romantik komediya, ijtimoiy realizm","Detektiv","Fantastika","Tarixiy"], t:0},
+        {q:"Qahramonlar qayerda yashaydi?", a:["Angliya qishloqlari (XIX asr)","Parij","Moskva","AQSh"], t:0},
+        {q:"Bennet xonimning asosiy maqsadi?", a:["Qizlarini yaxshi turmushga berish","Pul topish","Siyosat","Urush"], t:0},
+        {q:"Asarda asosiy mavzular?", a:["Andisha, g‘urur, sinfiy tabaqalar, nikoh","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Mr. Bingley kimga uylanadi?", a:["Jane Bennet","Elizabeth Bennet","Lydia Bennet","Caroline Bingley"], t:0},
+        {q:"Elizabethning eng yaqin dugonasi?", a:["Charlotte Lucas","Jane Bennet","Lydia Bennet","Caroline Bingley"], t:0},
+        {q:"Asarda qanday tabaqa tasvirlangan?", a:["O‘rta va yuqori sinf","Faqat kambag‘allar","Faqat boylar","Ishchilar"], t:0}
+      ],
+      orta: [
+        {q:"Mr. Darcyning Elizabethga birinchi taklifi nima sabab rad etilgan?", a:["G‘urur va nohaqlikda ayblash","Pul","Siyosat","Urush"], t:0},
+        {q:"Asarda yuzaki hukm qanday ta’sir ko‘rsatadi?", a:["Qahramonlarning munosabatiga salbiy ta’sir","Yo‘q","Yaxshi","Oddiy"], t:0},
+        {q:"Elizabeth qanday xarakterga ega?", a:["Aqlli, o‘tkir, mustaqil","Yuvosh","Ahmoq","Qo‘rqoq"], t:0},
+        {q:"Mr. Darcyning xarakteridagi asosiy nuqson?", a:["G‘urur va mag‘rurlik","Kamtarinlik","Qo‘rquv","Boylik"], t:0},
+        {q:"Mr. Collins kim?", a:["Bennetlarning uzoq qarindoshi, ruhoniy","Darcyning do‘sti","Bingleyning do‘sti","Wickhamning do‘sti"], t:0},
+        {q:"Asarning nomi ramziy ma’nosi?", a:["Elizabethning andishasi va Darcyning g‘ururi","Pul","Siyosat","Urush"], t:0},
+        {q:"Wickham obrazining maqsadi?", a:["Darcyning yomonligini ko‘rsatish, yovuzlik","Yaxshilik","Oila","Mehnat"], t:0},
+        {q:"Jane Austen asarlari qaysi davrga oid?", a:["Regency davri","Viktoriya davri","O‘rta asr","Uyg‘onish davri"], t:0},
+        {q:"Darcyning o‘z g‘ururini yengishi nimada aks etadi?", a:["Xat yozish va yordam berish","Pul berish","Uzr so‘rash","Uchib ketish"], t:0},
+        {q:"Asarda nikoh qanday tasvirlangan?", a:["Sevgiga asoslangan nikoh muammosi","Faqat pul uchun","Siyosat","Urush"], t:0}
+      ],
+      qiyin: [
+        {q:"Romanning sotsial tanqidi nimaga qaratilgan?", a:["XIX asr ayollarning iqtisodiy qaramligi","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Elizabethning 'andishasi' qanday psixologik holat?", a:["Yuzaki qarash, oldindan hukm chiqarish","Kamtarinlik","Qo‘rquv","Boylik"], t:0},
+        {q:"Mr. Darcyning mag‘rurligi ortidagi sabab?", a:["Ijtimoiy mavqe, o‘ziga yuqori baho berish","Pul","Siyosat","Urush"], t:0},
+        {q:"Asarda 'xushmuomalalik' tushunchasining roli?", a:["Oila va jamiyat munosabatidagi sun’iy odatlar","Faqat yaxshilik","Yo‘q","Oddiy"], t:0},
+        {q:"Jane Austen asarlarining markaziy mavzusi?", a:["Nikoh orqali ijtimoiy xavfsizlikni ta’minlash","Pul","Siyosat","Urush"], t:0},
+        {q:"Lady Catherine de Bourgh obrazi?", a:["Sinfiy kamsitish, g‘urur ramzi","Yaxshilik","Oila","Mehnat"], t:0},
+        {q:"Romandagi asosiy tematik o‘zgarish?", a:["Qahramonlarning o‘zini tushunib, xato qilish","Pul","Siyosat","Urush"], t:0},
+        {q:"Asarda Elizabeth va Darcy munosabati nima bilan bog‘liq?", a:["Aqlni va yurakni birlashtirish","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Jane Austenning satirasi nimaga qaratilgan?", a:["XIX asrning oilaviy va ijtimoiy hayoti","Pul","Siyosat","Urush"], t:0},
+        {q:"Lydia Bennet va Wickhamning nikohi ramziy ma’nosi?", a:["Ijtimoiy xavf, noqonuniy harakat","Baxt","Siyosat","Pul"], t:0}
+      ]
+    }
+  },
+
+  boburnoma: {
+    title: "Boburnoma (Zahiriddin Muhammad Bobur)",
+    levels: {
+      oson: [
+        {q:"Asar muallifi?", a:["Zahiriddin Muhammad Bobur","Alisher Navoiy","Beruniy","Ibn Sino"], t:0},
+        {q:"Asar janri?", a:["Memuar (avtobiografiya)","Roman","Doston","Drama"], t:0},
+        {q:"Bobur qaysi sulolaga asos solgan?", a:["Boburiylar","Temuriylar","Shayboniylar","Qoraxoniylar"], t:0},
+        {q:"Asar qaysi tilda yozilgan?", a:["Chig‘atoy tili (Eski o‘zbek tili)","Arab tili","Fors tili","Rus tili"], t:0},
+        {q:"Bobur qayerda tug‘ilgan?", a:["Andijon","Samarqand","Toshkent","Xiva"], t:0},
+        {q:"Bobur necha yoshda taxtga o‘tirgan?", a:["12 yoshda","20 yoshda","30 yoshda","50 yoshda"], t:0},
+        {q:"Bobur qaysi mamlakatda imperiya tuzgan?", a:["Hindiston","Eron","Turkiya","Xitoy"], t:0},
+        {q:"Asarda qaysi mintaqalar tasvirlangan?", a:["Markaziy Osiyo, Afg‘oniston, Hindiston","Yevropa","Afrika","Avstraliya"], t:0},
+        {q:"Bobur asarda nimani tasvirlaydi?", a:["O‘z hayoti, siyosiy voqealar, tabiat","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Boburning asosiy raqibi?", a:["Shayboniyxon","Temur","Ulug‘bek","Navoiy"], t:0}
+      ],
+      orta: [
+        {q:"Bobur asarda qanday tahlil qiladi?", a:["Realistik va xolisona","Subyektiv va xato","Fantastik","Siyosiy"], t:0},
+        {q:"Bobur asarda qaysi ilmlarga e’tibor bergan?", a:["Geografiya, botanika, zoologiya","Faqat siyosat","Faqat urush","Faqat pul"], t:0},
+        {q:"Bobur Samarqandni necha marta egallagan?", a:["3 marta","1 marta","5 marta","0 marta"], t:0},
+        {q:"Bobur asarda qaysi she’riy janrda yozgan?", a:["G‘azal, ruboiy","Roman","Doston","Drama"], t:0},
+        {q:"'Boburnoma'ning jahon adabiyotidagi ahamiyati?", a:["Avtobiografik adabiyotning noyob namunasi","Oddiy doston","Yo‘q","Faqat tarix"], t:0},
+        {q:"Asar davri qaysi voqealarni o‘z ichiga oladi?", a:["1494–1529 yillar","XII asr","XX asr","XXI asr"], t:0},
+        {q:"Bobur o‘z yurtini tashlab ketishiga sabab?", a:["Shayboniyxon bosimi","Pul","Siyosat","Urush"], t:0},
+        {q:"Bobur asarda o‘z shaxsini qanday tasvirlaydi?", a:["Gumanist, jangchi, shoir","Faqat jangchi","Faqat shoir","Faqat siyosatchi"], t:0},
+        {q:"Boburiy imperiyasining asosiy xususiyati?", a:["Islom, fors, hind madaniyatlarining sintezi","Faqat islom","Faqat hind","Faqat fors"], t:0},
+        {q:"Asarda tabiatning tasviri?", a:["Batafsil, ilmiy, lirik","Yo‘q","Oddiy","Faqat xato"], t:0}
+      ],
+      qiyin: [
+        {q:"Bobur asarda 'tarixiy determinizm'ga qanday munosabatda?", a:["Ta’sir etadi, ammo shaxsiy harakat muhim","Yo‘q","Faqat taqdir","Faqat pul"], t:0},
+        {q:"'Boburnoma'ning adabiy-tanqidiy qiymati?", a:["Adabiy tilning rivojlanishi, realistik uslub","Yo‘q","Faqat tarix","Siyosiy"], t:0},
+        {q:"Bobur Hindistonni egallashiga nima sabab bo‘lgan?", a:["Markaziy Osiyoda yashashga imkoniyat qolmasligi","Pul","Siyosat","Urush"], t:0},
+        {q:"Bobur o‘z avlodi (Temuriylar) taqdiriga munosabati?", a:["Afsus, ularning parchalanishi","G‘urur","Siyosat","Urush"], t:0},
+        {q:"Asarda Boburning ruhiy izlanishlari?", a:["Vatan sog‘inchi, diniy izlanishlar","Faqat pul","Siyosat","Urush"], t:0},
+        {q:"Bobur asarda o‘zini qanday adib sifatida baholaydi?", a:["O‘z so‘zining ustasi, realistik","Fantastik","Siyosat","Pul"], t:0},
+        {q:"'Boburnoma'ning so‘nggi yozilgan qismi?", a:["Hindiston davri","Markaziy Osiyo","Afg‘oniston","Eronda"], t:0},
+        {q:"Asarda 'Tuzuk' deb ataladigan qism qayerda joylashgan?", a:["Bobur yozmagan, bu nom noto‘g‘ri","Kitobning boshida","Kitobning oxirida","O‘rtasida"], t:0},
+        {q:"Bobur asarda qaysi davlatlardagi davlat arboblari haqida ma’lumot beradi?", a:["Temuriylar, Shayboniylar, Safaviylar, Lodiy sultonligi","Faqat Temuriylar","Faqat Shayboniylar","Faqat Lodiy"], t:0},
+        {q:"Boburning vafot etgan joyi?", a:["Agra","Andijon","Samarqand","Toshkent"], t:0}
+      ]
+    }
+  }
+
+/* ====== YANGI KITOB MA’LUMOTLARI QO‘SHILDI tugadi ====== */
+};
+
+
+
+/* ====== Holat ====== */
+let currentBookKey = null;
+let currentLevelIndex = 0; // 0: oson, 1: o‘rta, 2: qiyin
+let selections = []; // foydalanuvchi tanlagan variant indekslari
+let levelScores = [null, null, null]; // har bosqichdagi to‘g‘ri javoblar soni
+const levelNames = ["Oson", "O‘rta", "Qiyin"];
+
+/* ====== UI yordamchilari ====== */
+const $ = (id) => document.getElementById(id);
+function show(el, flag) { flag ? el.classList.remove("hidden") : el.classList.add("hidden"); }
+function updateProgress() {
+  const total = selections.length;
+  const answered = selections.filter(v => v !== null).length;
+  const pct = Math.round(answered / total * 100);
+  $("bar").style.width = pct + "%";
+  $("progressText").textContent = `${answered}/${total} belgilandi`;
+}
+
+/* ====== Dastur oqimi ====== */
+function start() {
+  currentBookKey = $("book").value;
+  currentLevelIndex = 0;
+  levelScores = [null, null, null];
+  show($("selectCard"), false);
+  show($("testCard"), true);
+  renderLevel();
+}
+
+function backToSelect() {
+  show($("testCard"), false);
+  show($("finalCard"), false);
+  show($("selectCard"), true);
+}
+
+function renderLevel() {
+  const book = DB[currentBookKey];
+  const levelKey = ["oson","orta","qiyin"][currentLevelIndex];
+  const levelArr = book.levels[levelKey];
+
+  $("title").textContent = `${book.title} — ${levelNames[currentLevelIndex]} bosqich`;
+  $("subtitle").textContent = `Savollar soni: ${levelArr.length}. Belgilang va yakunda natijani ko‘ring.`;
+
+  selections = Array(levelArr.length).fill(null);
+  updateProgress();
+  $("resultPanel").className = "panel hidden";
+  show($("retryBtn"), false);
+  show($("nextBtn"), false);
+
+  let html = "";
+  levelArr.forEach((item, i) => {
+    html += `
+      <div class="question">
+        <p><strong>${i+1}.</strong> ${item.q}</p>
+        <div class="answers">
+          ${item.a.map((opt, j) => `
+            <button id="btn-${i}-${j}" onclick="selectAnswer(${i}, ${j})">${opt}</button>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  });
+  $("questions").innerHTML = html;
+}
+
+function selectAnswer(qIndex, optIndex) {
+  const prev = selections[qIndex];
+  selections[qIndex] = optIndex;
+
+  // UI: toggle selected state
+  const answersCount = DB[currentBookKey].levels[["oson","orta","qiyin"][currentLevelIndex]][qIndex].a.length;
+  for (let j = 0; j < answersCount; j++) {
+    const btn = $(`btn-${qIndex}-${j}`);
+    if (!btn) continue;
+    btn.classList.toggle("selected", j === optIndex);
+  }
+  updateProgress();
+}
+
+
+// Yangi finishLevel funksiyasini qo‘y
+function finishLevel() {
+  const book = DB[currentBookKey];
+  const levelKey = ["oson","orta","qiyin"][currentLevelIndex];
+  const levelArr = book.levels[levelKey];
+
+  let correct = 0;
+  let unanswered = 0;
+  const wrongIndices = [];
+
+  levelArr.forEach((item, i) => {
+    const sel = selections[i];
+    if (sel === null) {
+      unanswered++;
+      return;
+    }
+    if (sel === item.t) {
+      correct++;
+    } else {
+      wrongIndices.push(i);
+      const wrongBtn = document.getElementById(`btn-${i}-${sel}`);
+      if (wrongBtn) wrongBtn.classList.add("wrong");
+    }
+  });
+
+  levelScores[currentLevelIndex] = correct;
+
+  let rating, css = "panel";
+  if (correct <= 5) { rating = "Qoniqarli"; css += " bad"; }
+  else if (correct <= 8) { rating = "Yaxshi"; css += " warn"; }
+  else { rating = "A’lo"; css += " good"; }
+
+  const canProceed = (correct >= 9);
+
+  const wrongSummary = wrongIndices.length
+    ? `<br/><strong>Xato ishlangan savollar:</strong> ${wrongIndices.map(i => i+1).join(", ")}`
+    : `<br/><strong>Xato savollar yo‘q.</strong>`;
+
+  const msg = `
+    <strong>Natija:</strong> ${correct}/${levelArr.length} — <strong>${rating}</strong><br/>
+    <span class="muted">Belgilanmagan savollar: ${unanswered}</span><br/>
+    ${wrongSummary}<br/><br/>
+    ${canProceed
+      ? "A’lo darajada bajardingiz! Keyingi bosqichga o‘tishingiz mumkin."
+      : "Qayta ishlash tavsiya etiladi. “Qoniqarli” va “Yaxshi” darajalar keyingi bosqichga o‘tmaydi."}
+  `;
+
+  const panel = $("resultPanel");
+  panel.className = css;
+  panel.innerHTML = msg;
+  show(panel, true);
+
+  show($("retryBtn"), !canProceed);
+  show($("nextBtn"), canProceed);
+
+  if (canProceed && currentLevelIndex === 2) {
+    setTimeout(showFinal, 600);
+  }
+}
+
+
+function retryLevel() {
+  renderLevel();
+}
+
+function nextLevel() {
+  if (currentLevelIndex < 2) {
+    currentLevelIndex++;
+    renderLevel();
+  } else {
+    showFinal();
+  }
+}
+
+function showFinal() {
+  show($("testCard"), false);
+  show($("finalCard"), true);
+
+  const book = DB[currentBookKey];
+  const total = (levelScores[0] || 0) + (levelScores[1] || 0) + (levelScores[2] || 0);
+  let overall;
+  if (total <= 15) overall = "Qoniqarli";
+  else if (total <= 24) overall = "Yaxshi";
+  else overall = "A’lo";
+
+  $("finalText").innerHTML = `
+    <strong>${book.title}</strong> bo‘yicha 3 bosqichni yakunladingiz.<br/>
+    Bosqich natijalari: Oson: ${levelScores[0]||0}/10, O‘rta: ${levelScores[1]||0}/10, Qiyin: ${levelScores[2]||0}/10.<br/><br/>
+    <strong>Umumiy natija:</strong> ${total}/30 — <strong>${overall}</strong>.
+  `;
+}
+
+function resetAll() {
+  currentBookKey = null;
+  currentLevelIndex = 0;
+  selections = [];
+  levelScores = [null, null, null];
+  show($("finalCard"), false);
+  show($("testCard"), false);
+  show($("selectCard"), true);
+}
+</script>
+</body>
+</html>
