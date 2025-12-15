@@ -3,213 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Kutubxona: Kitoblar Katalogi</title>
+    <title>Online Kutubxona</title>
     <link rel="stylesheet" href="ARMstyle.css">
+   
+</head>
+<body>
+<header>
+    <h2><font color="yellow" size="8" face="Verdana">📚 Bizning Kutubxonamizga</font></h2>
+    <p><i><font color="lightgreen"><h1>Xush kelibsiz!</h1></font></i></p>
+     <p><font color="yellow" size="10" face="Verdana"><h1>Bilim olamiga onlayn kirish imkoniyati!</h1></font></p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#home"><font color="cyan">Bosh sahifa</font></a></li>
+        <li><a href="#books"><font color="cyan">Kitoblar bo'limi</font></a></li>
+        <li><a href="#" id="navRegister">Ro‘yxatdan o‘tish</a></li>
+        <li><a href="onlineTest.html" target="_blank" rel="noopener"><font color="cyan">Online test ishlash</font></a></li>
+    </ul>
+</nav>
+
+
+
+
+ <header class="container">
+    <h1>Online kutubxona — Qidiruv va Filtrlash</h1>
+  </header>
+
+  <main class="container">
+    <!-- Qidiruv va asosiy filtrlash -->
+    <section class="filters" id="filters">
+      <div class="group">
+        <label for="author">Muallif</label>
+        <input type="text" id="author" placeholder="Masalan: Abdulla Qodiriy"/>
+      </div>
+      <div class="group">
+        <label for="genre">Janr</label>
+        <select id="genre">
+          <option value="">Barchasi</option>
+          <option value="Roman">Roman</option>
+          <option value="She'riyat">She'riyat</option>
+          <option value="Fantastika">Fantastika</option>
+          <option value="Tarix">Tarix</option>
+          <option value="Dramaturgiya">Dramaturgiya</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="year">Yil</label>
+        <select id="year">
+          <option value="">Barchasi</option>
+          <option>1920</option>
+          <option>1930</option>
+          <option>1960</option>
+          <option>1990</option>
+          <option>2005</option>
+          <option>2010</option>
+          <option>2020</option>
+          <option>2024</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="lang">Til</label>
+        <select id="lang">
+          <option value="">Barchasi</option>
+          <option value="O'zbek">O'zbek</option>
+          <option value="Rus">Rus</option>
+          <option value="Ingliz">Ingliz</option>
+        </select>
+      </div>
+
+      <!-- Qo'shimcha filtrlar -->
+      <div class="subfilters" style="grid-column: 1 / -1;">
+        <label class="chip">
+          <input type="checkbox" id="onlyEbook"/> Faqat elektron (PDF/EPUB)
+        </label>
+        <label class="chip">
+          <input type="checkbox" id="onlyAudio"/> Faqat audio (MP3)
+        </label>
+        <label class="chip">
+          <input type="checkbox" id="onlyFree"/> Faqat bepul
+        </label>
+      </div>
+
+      <!-- Harakat tugmalari -->
+      <div class="actions" style="grid-column: 1 / -1;">
+        <button class="btn" id="apply">Natijalarni ko‘rsat</button>
+        <button class="btn btn-outline" id="reset">Tozalash</button>
+      </div>
+    </section>
+
+    
+  </main>
+
+
+
+  
+
+
+<body>
+  <h1>💻 <font face="Georgia" color="blue">Elektron Kutubxona</font></h1>
+  <hr>
+  <p>
+    <strong><font size="4" color="darkred">Elektron kutubxona</font></strong> — bu <em>zamonaviy bilim manbai</em>, 
+    unda <b>kitoblar</b>, <u>maqolalar</u>, ilmiy ishlar va <mark>multimedia resurslari</mark> 
+    bir joyda jamlangan. <br>Uning asosiy maqsadi — <em><font color="purple">har kim uchun bilimni qulay va tezkor qilish</font></em>.
+  </p>
+  <h2>📖 Nega elektron kutubxona?</h2>
+  <p>
+    Avvallari <s>faqat qog‘oz kitoblar</s> <del>(eski shakl)</del> mavjud bo‘lsa,  
+    hozirda bilim olish uchun faqat <mark>bir necha soniya</mark> kifoya.  
+    Masalan, <i>fizika formulalari</i>ni o‘qishda ham foydali: <font color="brown">H<sub>2</sub>O, E=mc<sup>2</sup></font>.  
+  </p>
+  <h3>🔑 Elektron kutubxona qoidalari</h3>
+  <ol>
+    <li>Kitoblarni faqat <b><font color="darkblue">shaxsiy foydalanish</font></b> uchun yuklab oling</li>
+    <li><u><font color="red">Mualliflik huquqlariga</font></u> amal qiling</li>
+    <li><em>Login va parolingizni</em> begonalarga bermang</li>
+    <li>Forum va izohlarda <mark>odob qoidalariga</mark> amal qiling</li>
+  </ol>
+  <h4>🌐 Kutubxona imkoniyatlari</h4>
+  <ul>
+    <li><strong><font size="4" face="Tahoma" color="green">PDF va boshqa formatdagi kitoblarni yuklab olish</font></strong></li>
+    <li><em>Onlayn o‘qish</em> rejimi</li>
+    <li><u><font color="blue">Qidiruv tizimi</font></u> orqali tez topish</li>
+    <li><mark>Audio va video</mark> materiallardan foydalanish</li>
+  </ul>
+  <blockquote>
+    “<em><font face="Courier New" color="teal">Elektron kutubxona</font></em> — bu <b>bilim olamiga tezkor kirish</b>,  
+    u orqali <u>cheksiz imkoniyatlar</u> eshigi ochiladi.”
+  </blockquote>
+
+
+
+
+  <head>
+    <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitoblar Katalogi</title>
+  <link rel="stylesheet" href="flexboxstyle.css" />
     
 </head>
 <body>
 
-    <header>
-        <h2 class="main-title-uz">📚 Bizning Kutubxonamizga</h2>
-        <p class="welcome-message">Xush kelibsiz!</p>
-        <p class="slogan-message">Bilim olamiga onlayn kirish imkoniyati!</p>
+  <div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
 
-        <nav>
-            <ul>
-                <li><a href="#home" class="nav-link">Bosh sahifa</a></li>
-                <li><a href="#books" class="nav-link">Kitoblar bo'limi</a></li>
-                <li><a href="#register" class="nav-link">Ro'yxatdan o'tish</a></li>
-                <li><a href="onlineTest.html" target="_blank" rel="noopener" class="nav-link">Online test ishlash</a></li>
-            </ul>
-        </nav>
-    </header>
+    <h2>Ro‘yxatdan o‘tish</h2>
 
-    <main class="container">
+    <form id="registerForm">
+      <label>Ism:</label>
+      <input type="text" id="name">
 
-        <section class="filters-section">
-            <h1 class="header-title-main">Online kutubxona — Qidiruv va Filtrlash</h1>
-            <div class="filters" id="filters">
-                <div class="group">
-                    <label for="author">Muallif</label>
-                    <input type="text" id="author" placeholder="Masalan: Abdulla Qodiriy"/>
-                </div>
-                <div class="group">
-                    <label for="genre">Janr</label>
-                    <select id="genre">
-                        <option value="">Barchasi</option>
-                        <option value="Roman">Roman</option>
-                        <option value="She'riyat">She'riyat</option>
-                        <option value="Fantastika">Fantastika</option>
-                        <option value="Tarix">Tarix</option>
-                        <option value="Dramaturgiya">Dramaturgiya</option>
-                    </select>
-                </div>
-                <div class="group">
-                    <label for="year">Yil</label>
-                    <select id="year">
-                        <option value="">Barchasi</option>
-                        <option>1920</option><option>1930</option><option>1960</option>
-                        <option>1990</option><option>2005</option><option>2010</option>
-                        <option>2020</option><option>2024</option>
-                    </select>
-                </div>
-                <div class="group">
-                    <label for="lang">Til</label>
-                    <select id="lang">
-                        <option value="">Barchasi</option>
-                        <option value="O'zbek">O'zbek</option>
-                        <option value="Rus">Rus</option>
-                        <option value="Ingliz">Ingliz</option>
-                    </select>
-                </div>
+      <label>Email:</label>
+      <input type="email" id="email">
 
-                <div class="subfilters" style="grid-column: 1 / -1;">
-                    <label class="chip">
-                        <input type="checkbox" id="onlyEbook"/> Faqat elektron (PDF/EPUB)
-                    </label>
-                    <label class="chip">
-                        <input type="checkbox" id="onlyAudio"/> Faqat audio (MP3)
-                    </label>
-                    <label class="chip">
-                        <input type="checkbox" id="onlyFree"/> Faqat bepul
-                    </label>
-                </div>
+      <label>Parol:</label>
+      <input type="password" id="password">
 
-                <div class="actions" style="grid-column: 1 / -1;">
-                    <button class="btn" id="apply">Natijalarni ko‘rsat</button>
-                    <button class="btn btn-outline" id="reset">Tozalash</button>
-                </div>
-            </div>
-        </section>
-        
-        <hr>
+      <label>Parolni tasdiqlash:</label>
+      <input type="password" id="confirmPassword">
 
-        <section class="info-section">
-            <h1 class="section-heading">💻 Elektron Kutubxona</h1>
-            <p>
-                <strong class="highlight-text">Elektron kutubxona</strong> — bu *zamonaviy bilim manbai*, 
-                unda **kitoblar**, maqolalar, ilmiy ishlar va <mark>multimedia resurslari</mark> 
-                bir joyda jamlangan. <br>Uning asosiy maqsadi — <span class="purpose-text">har kim uchun bilimni qulay va tezkor qilish</span>.
-            </p>
-            <h2 class="sub-heading">📖 Nega elektron kutubxona?</h2>
-            <p>
-                Avvallari <span class="old-style">faqat qog‘oz kitoblar</span> (eski shakl) mavjud bo‘lsa,  
-                hozirda bilim olish uchun faqat <mark>bir necha soniya</mark> kifoya.  
-                Masalan, ilmiy formulalarni o‘qishda ham foydali: <span class="science-formula">H₂O, E=mc²</span>.  
-            </p>
-            <h3 class="sub-heading">🔑 Elektron kutubxona qoidalari</h3>
-            <ol>
-                <li>Kitoblarni faqat **shaxsiy foydalanish** uchun yuklab oling</li>
-                <li class="rule-warning">Mualliflik huquqlariga amal qiling</li>
-                <li>*Login va parolingizni* begonalarga bermang</li>
-                <li>Forum va izohlarda <mark>odob qoidalariga</mark> amal qiling</li>
-            </ol>
-            <h4 class="sub-heading">🌐 Kutubxona imkoniyatlari</h4>
-            <ul>
-                <li>**PDF va boshqa formatdagi kitoblarni yuklab olish**</li>
-                <li>*Onlayn o‘qish* rejimi</li>
-                <li><span class="feature-link">Qidiruv tizimi</span> orqali tez topish</li>
-                <li><mark>Audio va video</mark> materiallardan foydalanish</li>
-            </ul>
-            <blockquote>
-                “<span class="quote-style">Elektron kutubxona</span> — bu **bilim olamiga tezkor kirish**,  
-                u orqali <span class="quote-link">cheksiz imkoniyatlar</span> eshigi ochiladi.”
-            </blockquote>
-        </section>
+      <button type="submit">Yuborish</button>
 
-        <hr>
+      <p id="error" class="error"></p>
+      <p id="success" class="success"></p>
+    </form>
+  </div>
+</div>
 
-        <section id="books-catalog">
-            <h1 class="section-heading">🌍 Eng mashhur kitoblar katalogi</h1>
-            <div class="book-container">
-                
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Don Kixot.jpg" alt="Don Kixot" class="book-img">
-                    <h2>Don Kixot</h2>
-                    <p class="author">Migel de Servantes</p>
-                    <p class="genre">Roman, Satira (1605)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Don_Kixot" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Usta va Margarita.jpg" alt="Usta va Margarita" class="book-img">
-                    <h2>Usta va Margarita</h2>
-                    <p class="author">Mixael Bulgakov</p>
-                    <p class="genre">Fantastika, Falsafiy roman (1966)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Usta_va_Margarita" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
+ <script src="registratsiya.js"></script>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Urush va Tinchlik.jpg" alt="Urush va Tinchlik" class="book-img">
-                    <h2>Urush va Tinchlik</h2>
-                    <p class="author">Lev Tolstoy</p>
-                    <p class="genre">Tarixiy roman (1869)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Urush_va_tinchlik" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Andisha va G‘urur.jpg" alt="Andisha va G‘urur" class="book-img">
-                    <h2>Andisha va G‘urur</h2>
-                    <p class="author">Jeyn Ostin</p>
-                    <p class="genre">Romantik roman (1813)</p>
-                    <a href="https://uz.wikipedia.org/wiki/G%CA%BBurur_va_g%CA%BGaraz" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/1984.jpg" alt="1984" class="book-img">
-                    <h2>1984</h2>
-                    <p class="author">Jorj Oruell</p>
-                    <p class="genre">Distrofiya, Siyosiy roman (1949)</p>
-                    <a href="https://uz.wikipedia.org/wiki/1984_(roman)" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Alkimyogar.jpg" alt="Alkimyogar" class="book-img">
-                    <h2>Alkimyogar</h2>
-                    <p class="author">Paulo Koelo</p>
-                    <p class="genre">Ilhomlantiruvchi, Falsafiy roman (1988)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Alkimyogar" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Harry Potter va Sehrgarlar Toshi.jpg" alt="Harry Potter va Sehrgarlar Toshi" class="book-img">
-                    <h2>Harry Potter va Sehrgarlar Toshi</h2>
-                    <p class="author">J. K. Rowling</p>
-                    <p class="genre">Fantastika (1997)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Harry_Potter" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/otgan_kunlar.jpg" alt="O‘tkan kunlar" class="book-img">
-                    <h2>O‘tkan kunlar</h2>
-                    <p class="author">Abdulla Qodiriy</p>
-                    <p class="genre">Tarixiy, Romantik roman (1925)</p>
-                    <a href="https://uz.wikipedia.org/wiki/O%CA%BBtkan_kunlar" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Shaytanat.jpg" alt="Shaytanat" class="book-img">
-                    <h2>Shaytanat</h2>
-                    <p class="author">Tohir Malik</p>
-                    <p class="genre">Detektiv, Ijtimoiy roman (1993)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Shaytanat" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
+   
+</body>
 
-                <div class="book-card">
-                    <img src="Arm_rasmlari/Kichkina Shahzoda.jpg" alt="Kichkina Shahzoda" class="book-img">
-                    <h2>Kichkina Shahzoda</h2>
-                    <p class="author">Antuan de Sent-Ekzyuperi</p>
-                    <p class="genre">Falsafiy ertak (1943)</p>
-                    <a href="https://uz.wikipedia.org/wiki/Kichkina_shahzoda" target="_blank" rel="noopener"><button class="btn-card">Ko‘rish</button></a>
-                </div>
 
-            </div>
-        </section>
 
-    </main>
-
-    <footer>
-        <p>&copy; 2025 <span class="footer-highlight">Bizning Kutubxona</span></p>
-    </footer>
+<footer>
+    <p>&copy; 2025 <font color="yellow">Bizning Kutubxona</font></p>
+</footer>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
