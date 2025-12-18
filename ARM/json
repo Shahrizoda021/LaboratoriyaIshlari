@@ -1,0 +1,23 @@
+document.getElementById("apply").addEventListener("click", function () {
+  const author = document.getElementById("author").value.toLowerCase();
+  const genre = document.getElementById("genre").value;
+  const year = document.getElementById("year").value;
+  const lang = document.getElementById("lang").value;
+
+  const onlyEbook = document.getElementById("onlyEbook").checked;
+  const onlyAudio = document.getElementById("onlyAudio").checked;
+  const onlyFree = document.getElementById("onlyFree").checked;
+
+  const result = books.filter(book => {
+    return (
+      (author === "" || book.author.toLowerCase().includes(author)) &&
+      (genre === "" || book.genre === genre) &&
+      (year === "" || book.year == year) &&
+      (lang === "" || book.lang === lang) &&
+      (!onlyEbook || book.ebook === true) &&
+      (!onlyAudio || book.audio === true) &&
+      (!onlyFree || book.free === true)
+    );
+  });
+
+  displayBooks(result);});
